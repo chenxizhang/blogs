@@ -1,6 +1,7 @@
 {
-    "title": "我的书籍标题",
-    "author": "作者名称",
-    "description": "书籍的描述信息，可用于SEO",
+    "$schema": "./schema.json",
+    "title": "我的博客",
+    "description": "过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等",
+    "author": "陈希章",
     "language": "zh"
 }
