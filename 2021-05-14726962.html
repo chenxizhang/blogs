@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>Introduction · 我的博客</title>
+        <title>为博客园文章添加 “分享到Teams”按钮 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="readme.md" />
+    <link rel="next" href="2021-05-14725387.html" />
     
+    
+    <link rel="prev" href="2021-05-14786267.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -132,7 +134,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.2" data-path="2021-05-14726962.html">
+        <li class="chapter active" data-level="2.2" data-path="2021-05-14726962.html">
             
                 <a href="2021-05-14726962.html">
             
@@ -293,7 +295,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
+        <a href="." >为博客园文章添加 “分享到Teams”按钮</a>
     </h1>
 </div>
 
@@ -308,11 +310,28 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="为博客园文章添加-分享到teams按钮">为博客园文章添加 “分享到Teams”按钮</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2021-05-03, 地址: <a href="http://www.cnblogs.com/chenxizhang/p/14726962.html" target="_blank">http://www.cnblogs.com/chenxizhang/p/14726962.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p> 本文是《Microsoft Teams平台完全手册》的一部分，有兴趣请参考 <a href="https://teamsplatform.code365.xyz" target="_blank">https://teamsplatform.code365.xyz</a> </p>
+<p>Microsoft Teams是一个围绕沟通协作的平台，信息分享是很重要的。那么，如果你有一个网站，如何让你的用户很容易地将网站内容分享到Teams呢？</p>
+<p>下面通过实例讲解如何实现这个目的。熟悉我的朋友可能知道，我长期撰写技术博客，而博客园也是我认为中国做的很不错的博客平台，默认情况，目前博客园提供的模板中已经包含了一些分享的能力，包括分享到微博、微信等。下面我尝试为它添加分享到Teams的功能。</p>
+<h1 id="为网站添加分享到teams按钮"><img src="https://gblobscdn.gitbook.com/assets%2F-MY8lLgYy4a5_AIGOVZf%2F-MZjTPYAa27mamjZENUC%2F-MZjUwmC06EovnO1sABs%2F%E5%9B%BE%E7%89%87.png?alt=media&amp;token=74499e1d-323e-40a1-8972-7f77287abee0" alt>为网站添加“分享到Teams”按钮</h1>
+<p>Microsoft Teams提供了一个专门的库，可以很容易地生成分享按钮。下面的完整代码，请大家参考一下，其实逻辑很简单，我在现有分享工具栏的前面插入了一个按钮，并且按照规定定义了有关的属性。</p>
+<pre><code>&lt;!-- 概要：在博客园的博客页面底部增加“分享到Teams”的按钮 作者：陈希章 来源：《Microsoft Teams 平台完全手册》 网址：https://teamsplatform.code365.xyz--&gt;​&lt;!--引入Teams的分享脚本库--&gt;&lt;script async defer src=&quot;https://teams.microsoft.com/share/launcher.js&quot;&gt;&lt;/script&gt;&lt;!--定义合适的样式--&gt;&lt;style&gt; .divblock { padding: 10px; border: #c0c0c0 1px dashed; display: table-cell; vertical-align: middle; }&lt;/style&gt;&lt;!--在页面的合适位置放置这个按钮--&gt;&lt;script&gt; document.getElementById(&quot;green\_channel&quot;).setAttribute(&quot;class&quot;, &quot;divblock&quot;);​ let sharebutton = document.createElement(&quot;div&quot;); sharebutton.id = &quot;green\_channel\_teams&quot;; &lt;!--这个属性很重要，决定了分享时提供给Teams的网页链接--&gt; sharebutton.setAttribute(&quot;data-href&quot;, window.location.href); &lt;!--这个按钮必须至少有teams-share-button 这个样式 --&gt; sharebutton.setAttribute(&quot;class&quot;, &quot;divblock teams-share-button&quot;); &lt;!--你可以通过属性设置分享的一些辅助文字说明--&gt; sharebutton.setAttribute(&quot;data-msg-text&quot;, &quot;分享好文章：&quot;+ document.title +&quot; &lt;br /&gt; &quot;); document .getElementById(&quot;blog\_post\_info&quot;) .insertBefore(sharebutton, document.getElementById(&quot;green\_channel&quot;)); shareToMicrosoftTeams.renderButtons(); document .getElementById(&quot;green\_channel\_teams&quot;) .getElementsByTagName(&quot;img&quot;)[0].style.marginTop = &quot;10px&quot;;&lt;/script&gt;​
+</code></pre><p>现在可以把这段代码添加到我的博客后台设置中，请注意要添加到 “博客侧边栏公告” 这个区域，只有这里是允许JS代码的。</p>
+<p><img src="https://gblobscdn.gitbook.com/assets%2F-MY8lLgYy4a5_AIGOVZf%2F-MZjTPYAa27mamjZENUC%2F-MZjWLuhyurA0zbBIVCd%2F%E5%9B%BE%E7%89%87.png?alt=media&amp;token=ebadfc75-c643-4644-87dc-c363b119c70f" alt>保存后，打开某个文章，就可以看到下方分享栏会多出来一个Teams的按钮。</p>
+<p><img src="https://gblobscdn.gitbook.com/assets%2F-MY8lLgYy4a5_AIGOVZf%2F-MZjTPYAa27mamjZENUC%2F-MZjWmUODVyfz1kfh9nj%2F%E5%9B%BE%E7%89%87.png?alt=media&amp;token=e94dccec-15c6-4a62-a8fe-ad256d3858fc" alt>点击此按钮，会自动弹出一个对话框，并且把相关文字和链接都按照规定组合好，你只需要在“共享到”这个框中搜索团队或频道，然后点击 “共享”按钮即可。</p>
+<p><img src="https://gblobscdn.gitbook.com/assets%2F-MY8lLgYy4a5_AIGOVZf%2F-MZjTPYAa27mamjZENUC%2F-MZjXR6PnKQHw1Bn7gwZ%2F%E5%9B%BE%E7%89%87.png?alt=media&amp;token=204b9e7e-de5b-42bd-be9f-a6af1ca26004" alt>如果当前没有登录Teams，则在显示分享对话框前会提示用户登录。</p>
+<h1 id="网页元数据定义">网页元数据定义</h1>
+<p>在分享到Teams时，会尝试进行网页的预览（如上图所示，通过链接可以解析得到标题和内容简介），以便给用户更加好的体验。那么这个是怎么实现的呢？</p>
+<p>其实这个很简单的，你的网页只要按照下面的约定在Head中定义元数据即可。</p>
+<p><img src="https://gblobscdn.gitbook.com/assets%2F-MY8lLgYy4a5_AIGOVZf%2F-MZjTPYAa27mamjZENUC%2F-MZjZR0ra0TCIFOWtJkm%2F%E5%9B%BE%E7%89%87.png?alt=media&amp;token=47accf84-abac-4c31-aca0-8c0d99ebba0f" alt>考虑到对搜索引擎和不同平台的兼容性，我的建议是两个版本都定义。如果两者都定义了，Teams会以Open Graph定义的为准。</p>
+<p>我们回过头去看刚才分享的博客园文章源代码</p>
+<p><img src="https://gblobscdn.gitbook.com/assets%2F-MY8lLgYy4a5_AIGOVZf%2F-MZjTPYAa27mamjZENUC%2F-MZj_-fDkg2g0ZCs8oEg%2F%E5%9B%BE%E7%89%87.png?alt=media&amp;token=ee8bb052-2280-443c-90dc-37cd11cccac8" alt>可以看出当前网页定义了title, description,og:description, 所以在分享时能解析出标题和描述，但没有定义缩略图，而且定义标题和内容摘要也不是特别规范。</p>
+<p>感谢博客园提供的平台，以及允许自定义页面的能力。如果默认能把“分享到Teams”的按钮加上，并且在网页元数据这个部分能够规范一点就更好了。</p>
+<p>​</p>
 
                                 
                                 </section>
@@ -340,8 +359,12 @@
 
             
                 
+                <a href="2021-05-14786267.html" class="navigation navigation-prev " aria-label="Previous page: 新书上市——Microsoft Teams 平台完全手册">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="readme.md" class="navigation navigation-next navigation-unique" aria-label="Next page: 简介">
+                
+                <a href="2021-05-14725387.html" class="navigation navigation-next " aria-label="Next page: 《Microsoft Teams 平台完全手册》第三章出炉">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -352,7 +375,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"简介","level":"1.2","depth":1,"path":"readme.md","ref":"readme.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-16T07:19:27.819Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-16T07:19:34.788Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"为博客园文章添加 “分享到Teams”按钮","level":"2.2","depth":1,"next":{"title":"《Microsoft Teams 平台完全手册》第三章出炉","level":"2.3","depth":1,"path":"2021-05-14725387.md","ref":"2021-05-14725387.md","articles":[]},"previous":{"title":"新书上市——Microsoft Teams 平台完全手册","level":"2.1","depth":1,"path":"2021-05-14786267.md","ref":"2021-05-14786267.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2021-05-14726962.md","mtime":"2021-11-16T07:19:27.819Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-16T07:19:34.788Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
