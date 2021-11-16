@@ -1,10 +1,50 @@
+import os
+import sys
+from itertools import groupby
+
+import lxml
+import requests
+from bs4 import BeautifulSoup
+from markdownify import markdownify as md
+
 # 从本地数据文件中读取数据
 
+
+def getNumbers(link):
+    t = link.split('/')
+    return {"year": t[5], "month": t[6], "day": t[7], "id": t[8].split('.')[0]}
+
+
+def getPost(item):
+    n = getNumbers(item.guid.string)
+    return {
+        "title": item.title.string,
+        "link": item.guid.string,
+        "body": item.description.string,
+        "id": n["id"],
+        "month": n["year"] + "-" + n["month"],
+        "pubdate": "{}-{}-{}".format(n["year"], n["month"], n["day"])
+    }
+
+
+def htmlToMarkdown(html):
+    # 下载并替换图片地址
+    soup = BeautifulSoup(html, 'html.parser')
+    for img in soup.find_all('img'):
+        try:
+            r = requests.get(img['src'], stream=True)
+            if(r.status_code == 200):
+                path = '/images/' + img['src'].split('/')[-1]
+                with open("../docs"+path, 'wb') as f:
+                    shutil.copyfileobj(r.raw, f)
+                img['src'] = "."+path
+        except:
+            pass
+
+    return md(str(soup))
+
+
 if __name__ == '__main__':
-    import sys
-    import os
-    from bs4 import BeautifulSoup
-    import lxml
 
     # 获取参数
     if len(sys.argv) < 2:
@@ -17,8 +57,16 @@ if __name__ == '__main__':
         exit(1)
 
     # 读取数据
-    soup = BeautifulSoup(open(file_name, mode="r", encoding="utf8"), 'lxml')
-    items = [(item.title.string, item.guid.string, item.description.string)
-             for item in soup.select('item')]
+    soup = BeautifulSoup(
+        open(file_name, mode="r", encoding="utf8"), 'html.parser')
+    items = groupby(sorted([getPost(item) for item in soup.find_all(
+        'item')], key=lambda x: x['month'], reverse=True), lambda x: x['month'])
 
-    print(len(items))
+    with open("../docs/summary.md", mode="a", encoding="utf8") as f:
+        for g in items:
+            f.write("\n\n\n### {}\n".format(g[0]))
+            for post in g[1]:
+                file_path = "{}-{}.md".format(post["month"], post["id"])
+                f.write("* [{}]({})\n".format(post["title"], file_path))
+                open(file='../docs/{}'.format(file_path), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
+                    post["title"], post["pubdate"], post["link"], htmlToMarkdown(post["body"])))
