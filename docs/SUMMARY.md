@@ -3,20 +3,6 @@
 * [简介](README.md)
 
 
-### 2021-05
-* [新书上市——Microsoft Teams 平台完全手册](2021-05-14786267.md)
-* [为博客园文章添加 “分享到Teams”按钮](2021-05-14726962.md)
-* [《Microsoft Teams 平台完全手册》第三章出炉](2021-05-14725387.md)
-
-
-### 2021-04
-* [Microsoft Teams平台手册公开邀请试读](2021-04-14718244.md)
-* [《Microsoft Teams平台完全手册》开工](2021-04-14634960.md)
-
-
 ### 2021-03
-* [Teams 开发平台月报（2021-03）](2021-03-14552354.md)
-* [一文看懂Power Platform 和 Teams的整合](2021-03-14519781.md)
-* [Microsoft Teams最新功能发布 – 平台篇](2021-03-14500515.md)
-* [Microsoft Teams最新功能发布 - 安全合规和可管理性](2021-03-14496666.md)
-* [Microsoft Teams 最新功能发布：通话及周边设备](2021-03-14495961.md)
+* [Microsoft Teams 最新功能发布：通话及周边设备](http://www.cnblogs.com/chenxizhang/p/14495961.html)
+* [Microsoft Teams最新功能发布 - 安全合规和可管理性](http://www.cnblogs.com/chenxizhang/p/14496666.html)
