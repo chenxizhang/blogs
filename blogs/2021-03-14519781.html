@@ -1,0 +1,466 @@
+
+<!DOCTYPE HTML>
+<html lang="zh" >
+    <head>
+        <meta charset="UTF-8">
+        <title>一文看懂Power Platform 和 Teams的整合 · 我的博客</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.23">
+        <meta name="author" content="陈希章">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="2021-03-14500515.html" />
+    
+    
+    <link rel="prev" href="2021-03-14552354.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">2021-05</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="2021-05-14786267.html">
+            
+                <a href="2021-05-14786267.html">
+            
+                    
+                    新书上市——Microsoft Teams 平台完全手册
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="2021-05-14726962.html">
+            
+                <a href="2021-05-14726962.html">
+            
+                    
+                    为博客园文章添加 “分享到Teams”按钮
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="2021-05-14725387.html">
+            
+                <a href="2021-05-14725387.html">
+            
+                    
+                    《Microsoft Teams 平台完全手册》第三章出炉
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="2021-04-14718244.html">
+            
+                <a href="2021-04-14718244.html">
+            
+                    
+                    Microsoft Teams平台手册公开邀请试读
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="2021-04-14634960.html">
+            
+                <a href="2021-04-14634960.html">
+            
+                    
+                    《Microsoft Teams平台完全手册》开工
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="2021-03-14552354.html">
+            
+                <a href="2021-03-14552354.html">
+            
+                    
+                    Teams 开发平台月报（2021-03）
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.8" data-path="2021-03-14519781.html">
+            
+                <a href="2021-03-14519781.html">
+            
+                    
+                    一文看懂Power Platform 和 Teams的整合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="2021-03-14500515.html">
+            
+                <a href="2021-03-14500515.html">
+            
+                    
+                    Microsoft Teams最新功能发布 – 平台篇
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="2021-03-14496666.html">
+            
+                <a href="2021-03-14496666.html">
+            
+                    
+                    Microsoft Teams最新功能发布 - 安全合规和可管理性
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="2021-03-14495961.html">
+            
+                <a href="2021-03-14495961.html">
+            
+                    
+                    Microsoft Teams 最新功能发布：通话及周边设备
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            本書使用 HonKit 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >一文看懂Power Platform 和 Teams的整合</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="一文看懂power-platform-和-teams的整合">一文看懂Power Platform 和 Teams的整合</h1>
+<blockquote>
+<p>原文发表于 2021-03-11, 地址: <a href="http://www.cnblogs.com/chenxizhang/p/14519781.html" target="_blank">http://www.cnblogs.com/chenxizhang/p/14519781.html</a> </p>
+</blockquote>
+<p>大家知道，Microsoft Teams 正在飞速增长，目前每天的活跃商业用户大约在1.5亿左右，各地用户通过Teams开会的时间，每天超过50亿分钟；另外一方面，全球财富500强的客户中，超过97%的客户都在使用Microsoft Power Platform，那么这两个平台强强联手起来是一个什么效果呢？能够给客户和用户带来什么样的收益呢？本文将简要地列出他们整合的场景。</p>
+<p><img src="../images/9072-20210311182755336-1216186924.png" alt></p>
+<p>了解Microsoft Teams，请访问：<a href="https://www.microsoft.com/zh-cn/microsoft-teams/group-chat-software" target="_blank">https://www.microsoft.com/zh-cn/microsoft-teams/group-chat-software</a>, 请注意，目前Teams还没有国内专门的版本，您可以使用国际版，或者永久免费版。</p>
+<p><img src="../images/9072-20210311182757546-1216092512.png" alt></p>
+<p>如想了解Microsoft Power Platform，请访问 <a href="https://powerplatform.microsoft.com/zh-cn/，值得一提的是，Power" target="_blank">https://powerplatform.microsoft.com/zh-cn/，值得一提的是，Power</a> Platform中，Power Virtual Agents之外其他三个组件，除了国际版，我们在国内有专门的版本可供选择。【但要注意，下面提到的整合，由于Teams目前只有国际版，所以对应的Power Platform也需要是国际版】</p>
+<p><img src="../images/9072-20210311182758747-1835834118.png" alt><img src="../images/9072-20210311182759077-635796535.png" alt></p>
+<p>言归正传，我们来看看Power Platform四大组件，分别可以在Microsoft Teams中如何进行整合吧。</p>
+<p><strong>Power Apps + Teams</strong></p>
+<ol>
+<li>您可以将现有的Power Apps 应用（Canvas应用和Model-Driven应用都可以），作为Teams中的一个频道选项卡应用添加进来，给团队成员使用。这个适合有协作的场景，例如提交团队工作日记，或者任务管理等。
+<img src="../images/9072-20210311182800051-1736026633.png" alt></li>
+<li>您可以将现有的Power Apps 应用（主要指Canvas应用），作为Teams的个人应用安装，给用户单独使用。这个适合一些自我管理的场景，例如培训学习，知识管理等。
+<img src="../images/9072-20210311182800637-1565313832.png" alt></li>
+<li>直接在Teams中设计和开发PowerApps应用。安装PowerApps这个Teams应用，你可以在不离开Teams的情况下，为你的团队开发和设计新的应用，并且可以一键部署到频道。
+<img src="../images/9072-20210311182801393-1494116350.png" alt></li>
+<li>Teams会为PowerApps的开发提供上下文支持，以及性能优化（通过预加载等技术实现），以便使PowerApps运行更加流畅。</li>
+</ol>
+<p><img src="../images/9072-20210311182802008-870930573.png" alt></p>
+<p><strong>Power Automate + Teams</strong></p>
+<ol>
+<li>基于Teams的聊天消息触发 Power Automate的流程。这是一个新功能，我在此前的文章中有介绍，非常强大，有兴趣可以参考。【<a href="http://mp.weixin.qq.com/s?__biz=MzU0Njk2MjYxNw==&amp;mid=2247483878&amp;idx=1&amp;sn=b6fe43f6062f39abebc7d054e9b0ea84&amp;chksm=fb54ec30cc23652617576360353f6d63611f6d4a19eeb01e333b5cfc41f8c882ca8ba81f0ffe&amp;scene=21" target="_blank">Microsoft Teams最新功能发布 – 平台篇</a>】，原本这是要通过编写&quot;消息扩展&quot;的方式来实现的场景，现在用PowerAutomate来对接，实现无限可能。</li>
+</ol>
+<p><img src="../images/9072-20210311182802763-1165903476.png" alt></p>
+<ol>
+<li>通过Power Automate 给 Teams发送卡片消息。这个场景特别适合于跟外部系统对接，例如某个后台系统有一个通知要发送，或者要收集用户的反馈，通过这个来实现，真的是很方便，很松耦合。这已经应用非常广泛了，而且也是我看待低代码平台和现有系统的一个角度，他们是共存的，未来是混搭的。我可以有很多案例分享这样的例子，现在要开发一个新的功能，我一般都会先想一下，哪些环节可以用低代码来实现，哪些不能？让低代码做它擅长的东西，而开发人员可以专注在一些必须写代码实现的环节。关于如何看待低代码趋势和开发人员的未来，我昨天也发了一篇文章，分享了一些自己的浅见，有兴趣可以在访问【<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODEyNjE5OA==&amp;mid=2455456590&amp;idx=1&amp;sn=bc150046d6d63cd26d534e4f6861c4bc&amp;scene=21" target="_blank">谈谈低代码趋势和开发人员的未来</a>】</li>
+</ol>
+<p><img src="../images/9072-20210311182803324-1645978246.png" alt></p>
+<p>在Power Automate中有大量跟Teams相关的模板和组件可以直接用，例如</p>
+<p><img src="../images/9072-20210311182804268-1961579055.png" alt></p>
+<p><img src="../images/9072-20210311182804917-279499683.png" alt></p>
+<ol>
+<li>直接在Teams中设计、开发、管理 Power Automate的流程。跟上面提到的PowerApps应用一样，你现在也可以在不离开Teams的情况下，进行Power Automate的完整生命周期开发管理了。
+<img src="../images/9072-20210311182805539-1423856743.png" alt></li>
+</ol>
+<p><strong>Power BI + Teams</strong></p>
+<ol>
+<li>把现有的Power BI的报表，在Teams的频道选项卡上面使用。这用来分享给团队报表链接，以便快速访问，很方便实现。
+<img src="../images/9072-20210311182805981-2012675590.png" alt></li>
+</ol>
+<p><img src="../images/9072-20210311182806430-638666309.png" alt></p>
+<ol>
+<li>在Teams中自动识别 PowerBI 报表的链接，并且在消息中展示预览。这样可以让用户的沟通更加有效率，相比较一个文本链接而言，显然有下面这样的丰富信息提示，以及相关操作的按钮，会更加直观传递信息，也帮助用户更快地采取行动。</li>
+</ol>
+<p><img src="../images/9072-20210311182807164-1760799293.png" alt></p>
+<ol>
+<li>随时从PowerBI 的报表发起Teams对话，自动打开分享对话框，把当前的链接和相关的上下文信息带到对话中来，如丝般顺滑的体验。</li>
+</ol>
+<p><img src="../images/9072-20210311182807557-1529493021.png" alt></p>
+<p><img src="../images/9072-20210311182808526-947812359.png" alt></p>
+<ol>
+<li>在 Teams 中直接管理Power BI 设计、开发、管理 Power BI 资源。
+<img src="../images/9072-20210311182809860-1590066191.png" alt></li>
+</ol>
+<p><strong>Power Virtual Agents + Teams</strong></p>
+<ol>
+<li>在 Teams 中创建 、调试、发布、管理PVA 机器人。</li>
+</ol>
+<p><img src="../images/9072-20210311182810570-1455380503.png" alt></p>
+<ol>
+<li>将现有PVA 机器人添加到 Teams。</li>
+</ol>
+<p><img src="../images/9072-20210311182811486-280775727.png" alt></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="2021-03-14552354.html" class="navigation navigation-prev " aria-label="Previous page: Teams 开发平台月报（2021-03）">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="2021-03-14500515.html" class="navigation navigation-next " aria-label="Next page: Microsoft Teams最新功能发布 – 平台篇">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"一文看懂Power Platform 和 Teams的整合","level":"1.8","depth":1,"next":{"title":"Microsoft Teams最新功能发布 – 平台篇","level":"1.9","depth":1,"path":"blogs/2021-03-14500515.md","ref":"./blogs/2021-03-14500515.md","articles":[]},"previous":{"title":"Teams 开发平台月报（2021-03）","level":"1.7","depth":1,"path":"blogs/2021-03-14552354.md","ref":"./blogs/2021-03-14552354.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"blogs/2021-03-14519781.md","mtime":"2021-11-16T07:04:18.540Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-16T07:04:26.350Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
