@@ -17,10 +17,10 @@ def htmlToMarkdown(html):
         try:
             r = requests.get(img['src'], stream=True)
             if(r.status_code == 200):
-                path = 'images/' + img['src'].split('/')[-1]
-                with open(path, 'wb') as f:
+                path = '/images/' + img['src'].split('/')[-1]
+                with open("../src"+path, 'wb') as f:
                     shutil.copyfileobj(r.raw, f)
-                img['src'] = "../"+path
+                img['src'] = ".."+path
         except:
             pass
 
@@ -46,16 +46,10 @@ if __name__ == '__main__':
     # 打印博客信息
     blogid = blogInfo[0]['blogid']
 
-    # 获取所有的类别
-    categories = server.metaWeblog.getCategories(blogid, usr, passwd)
-    open(file='categories.json', mode='w',
-         encoding='utf-8').write(str(categories))
-    # print(categories)
-
     # 获取所有的文章
-    posts = server.metaWeblog.getRecentPosts(blogid, usr, passwd, 100)
+    posts = server.metaWeblog.getRecentPosts(blogid, usr, passwd, 10)
 
-    with open(file='SUMMARY.md', mode='w', encoding='utf-8') as f:
+    with open(file='../src/SUMMARY.md', mode='w', encoding='utf-8') as f:
         f.write('# SUMMARY'+'\n\n\n')
 
         for group in groupPosts(posts):
@@ -65,5 +59,5 @@ if __name__ == '__main__':
                 f.write('* [{}]({})\n'.format(post['title'],
                         "./blogs/{}-{}.md".format(month, post['postid'])))
 
-                open(file='blogs/{}-{}.md'.format(month, post['postid']), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
+                open(file='../src/blogs/{}-{}.md'.format(month, post['postid']), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
                     post["title"], post["dateCreated"].strftime("%Y-%m-%d"), post["link"], htmlToMarkdown(str(post["description"]))))
