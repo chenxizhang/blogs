@@ -4,9 +4,11 @@
 * [新书上市——Microsoft Teams 平台完全手册](./blogs/2021-05-14786267.md)
 * [为博客园文章添加 “分享到Teams”按钮](./blogs/2021-05-14726962.md)
 * [《Microsoft Teams 平台完全手册》第三章出炉](./blogs/2021-05-14725387.md)
+
 ### 2021-04
 * [Microsoft Teams平台手册公开邀请试读](./blogs/2021-04-14718244.md)
 * [《Microsoft Teams平台完全手册》开工](./blogs/2021-04-14634960.md)
+
 ### 2021-03
 * [Teams 开发平台月报（2021-03）](./blogs/2021-03-14552354.md)
 * [一文看懂Power Platform 和 Teams的整合](./blogs/2021-03-14519781.md)
