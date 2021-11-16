@@ -1,5 +1,6 @@
 import shutil
 import sys
+import os.path
 import xmlrpc.client as xmlrpclib
 from itertools import groupby
 
@@ -50,14 +51,19 @@ if __name__ == '__main__':
     posts = server.metaWeblog.getRecentPosts(blogid, usr, passwd, 10)
 
     with open(file='../docs/SUMMARY.md', mode='w', encoding='utf-8') as f:
-        f.write('# SUMMARY'+'\n\n\n')
+        f.write('# SUMMARY'+'\n\n')
+        f.write('* [简介](README.md)\n')
 
         for group in groupPosts(posts):
             month = group[0]
-            f.write('### ' + month + '\n\n\n')
+            f.write('\n\n### ' + month + '\n')
             for post in group[1]:
-                f.write('* [{}]({})\n'.format(post['title'],
-                        "./{}-{}.md".format(month, post['postid'])))
+                filePath = "{}-{}.md".format(month, post['postid'])
 
-                open(file='../docs/{}-{}.md'.format(month, post['postid']), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
+                f.write('* [{}]({})\n'.format(post['title'], filePath))
+
+                if(os.path.exists(path='../docs/{}'.format(filePath))):
+                    continue
+
+                open(file='../docs/{}'.format(filePath), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
                     post["title"], post["dateCreated"].strftime("%Y-%m-%d"), post["link"], htmlToMarkdown(str(post["description"]))))
