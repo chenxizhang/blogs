@@ -15,10 +15,10 @@ def htmlToMarkdown(html):
     soup = BeautifulSoup(html, 'html.parser')
     for img in soup.find_all('img'):
         try:
-            r = requests.get(img['src'], stream=True)
+            r = requests.get(img['docs'], stream=True)
             if(r.status_code == 200):
                 path = '/images/' + img['src'].split('/')[-1]
-                with open("../src"+path, 'wb') as f:
+                with open("../docs"+path, 'wb') as f:
                     shutil.copyfileobj(r.raw, f)
                 img['src'] = ".."+path
         except:
@@ -49,15 +49,15 @@ if __name__ == '__main__':
     # 获取所有的文章
     posts = server.metaWeblog.getRecentPosts(blogid, usr, passwd, 10)
 
-    with open(file='../src/SUMMARY.md', mode='w', encoding='utf-8') as f:
+    with open(file='../docs/SUMMARY.md', mode='w', encoding='utf-8') as f:
         f.write('# SUMMARY'+'\n\n\n')
 
         for group in groupPosts(posts):
             month = group[0]
-            f.write('### ' + month + '\n')
+            f.write('### ' + month + '\n\n\n')
             for post in group[1]:
                 f.write('* [{}]({})\n'.format(post['title'],
-                        "./blogs/{}-{}.md".format(month, post['postid'])))
+                        "./{}-{}.md".format(month, post['postid'])))
 
-                open(file='../src/blogs/{}-{}.md'.format(month, post['postid']), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
+                open(file='../docs/{}-{}.md'.format(month, post['postid']), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
                     post["title"], post["dateCreated"].strftime("%Y-%m-%d"), post["link"], htmlToMarkdown(str(post["description"]))))
