@@ -1,8 +1,8 @@
-import os
 import sys
+import os
+import shutil
 from itertools import groupby
 
-import lxml
 import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
@@ -27,20 +27,21 @@ def getPost(item):
     }
 
 
-def htmlToMarkdown(html):
+def htmlToMarkdown(html, id):
     # 下载并替换图片地址
     soup = BeautifulSoup(html, 'html.parser')
     for img in soup.find_all('img'):
         try:
             r = requests.get(img['src'], stream=True)
             if(r.status_code == 200):
-                path = '/images/' + img['src'].split('/')[-1]
+                path = '/images/'+id+"-" + img['src'].split('/')[-1]
                 with open("../docs"+path, 'wb') as f:
                     shutil.copyfileobj(r.raw, f)
                 img['src'] = "."+path
-        except:
-            pass
-
+            else:
+                print("图片下载失败:{}".format(img['src']))
+        except Exception as e:
+            print("图片下载报错:{},{}".format(img['src'], e))
     return md(str(soup))
 
 
@@ -59,14 +60,15 @@ if __name__ == '__main__':
     # 读取数据
     soup = BeautifulSoup(
         open(file_name, mode="r", encoding="utf8"), 'html.parser')
-    items = groupby(sorted([getPost(item) for item in soup.find_all(
-        'item')], key=lambda x: x['month'], reverse=True), lambda x: x['month'])
 
-    with open("../docs/summary.md", mode="a", encoding="utf8") as f:
+    items = groupby(sorted([getPost(item) for item in soup.find_all(
+        'item')][:20], key=lambda x: x['month'], reverse=True), lambda x: x['month'])
+
+    with open("../docs/SUMMARY.md", mode="a", encoding="utf8") as f:
         for g in items:
             f.write("\n\n\n### {}\n".format(g[0]))
             for post in g[1]:
                 file_path = "{}-{}.md".format(post["month"], post["id"])
                 f.write("* [{}]({})\n".format(post["title"], file_path))
                 open(file='../docs/{}'.format(file_path), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
-                    post["title"], post["pubdate"], post["link"], htmlToMarkdown(post["body"])))
+                    post["title"], post["pubdate"], post["link"], htmlToMarkdown(post["body"], post["id"])))
