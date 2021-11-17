@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>SharePoint中的用户信息和检索的有关知识 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-10-1840655.html" />
     
+    
+    <link rel="prev" href="2010-10-1841802.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -347,7 +349,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.13" data-path="2010-10-1841342.html">
+        <li class="chapter active" data-level="3.13" data-path="2010-10-1841342.html">
             
                 <a href="2010-10-1841342.html">
             
@@ -621,7 +623,7 @@
             
         </li>
     
-        <li class="chapter " data-level="5.13" data-path="2010-10-1841342.html">
+        <li class="chapter active" data-level="5.13" data-path="2010-10-1841342.html">
             
                 <a href="2010-10-1841342.html">
             
@@ -895,7 +897,7 @@
             
         </li>
     
-        <li class="chapter " data-level="7.13" data-path="2010-10-1841342.html">
+        <li class="chapter active" data-level="7.13" data-path="2010-10-1841342.html">
             
                 <a href="2010-10-1841342.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >SharePoint中的用户信息和检索的有关知识</a>
     </h1>
 </div>
 
@@ -966,11 +968,47 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="sharepoint中的用户信息和检索的有关知识">SharePoint中的用户信息和检索的有关知识</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-10-02, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/10/02/1841342.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/10/02/1841342.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>最近在做的项目中涉及到对于SharePoint用户信息的特殊处理，特意整理一些资料出来，给大家参考参考</p>
+<h1 id="1-首先，在sharepoint中，要检索到网站的用户，有下面一些相关知识"> 1. 首先，在SharePoint中，要检索到网站的用户，有下面一些相关知识</h1>
+<p> <a href="http://www.cnblogs.com/LeimOO/archive/2009/09/03/1559790.html" title="http://www.cnblogs.com/LeimOO/archive/2009/09/03/1559790.html" target="_blank">http://www.cnblogs.com/LeimOO/archive/2009/09/03/1559790.html</a></p>
+<p> SPWeb site = SPContext.Current.Web; SPUserCollection c1 = site.Users; SPUserCollection c2 = site.AllUsers; SPUserCollection c3 = site.SiteUsers; <strong>Users</strong> 集合是三个集合中包含成员最少的集合。该集合包含了当前网站中所有已显式分配了权限的外部主体。 <strong>AllUsers</strong> 集合包括 Users 集合中的所有成员，以及通过组或角色成员资格使用隐式权限访问过网站中的对象的外部用户。例如，假定名为 Brian 的用户（登录名 LITWAREINC\BrianC）从未被显式授予访问某个网站和查看特定列表的权限。但他也许仍可以查看列表，因为他所属的 Active Directory 组已被配置了列表查看权限。<strong>当 Brian 首次访问网站或其中任一对象</strong>（比如，使用隐式权限查看一个列表）时，他会被添加为 AllUsers 集合的成员，但不会被添加为 Users 集合的成员。 <strong>SiteUsers</strong> 集合是包含了当前网站集中每个 AllUsers 集合的成员的一个聚合。该集合的成员包括所有已分配了对网站集中所有对象的访问权限的外部主体，以及所有已被授予使用隐式权限访问网站集中所有对象的权限的外部用户。   一般我们在SharePoint上面添加用户的时候，都可能会用组的方式添加。所以，通常情况下，如果要取得所有用户信息（包括通过组的方式添加的那些用户），我们会用AllUsers。 但这里有一个关键： <strong>如果一个用户是通过组的方式添加到网站的，那么当然他是否访问到该网站的。但也只有当他至少访问过一次该网站之后，我们才可以在Web.AllUsers中检索到他。</strong>  </p>
+<h1 id="为什么会有这样的行为呢？其实也不难理解，而且这种设计还是有些道理的。因为我们知道一个windows用户组可能包含的用户非常多，假设有10000个用户。那么sharepoint不可能立即把这10000个用户的信息都复制过来。所以它采取了相对更加智能的方式来复制用户数据：按需复制。---上面提到了复制，这是什么意思呢？其实在sharepoint中，是有一个user-profile的服务的，也就是说，windows-的ad帐号中的一些信息，会被用某种特定的方式保存在sharepoint中，这就是所谓的用户配置（user-profile文件。--这个用户配置文件是会定期更新的，默认是每天更新一次----好吧，虽然这样的工作原理我们是理解的。-但是，假设我们无法确认用户是否至少登陆过一次，那么有没有办法根据一个用户名或者邮件地址，获取到该用户的信息呢？-你可能会想到，实际上这需要查询到ad中的信息。没错，但我们应该怎么来完成这样的任务呢？-----2通过代码根据邮件地址查询用户信息"> 为什么会有这样的行为呢？其实也不难理解，而且这种设计还是有些道理的。因为我们知道一个Windows用户组可能包含的用户非常多，假设有10000个用户。那么SharePoint不可能立即把这10000个用户的信息都复制过来。所以它采取了相对更加“智能”的方式来复制用户数据：按需复制。   上面提到了复制，这是什么意思呢？其实在SharePoint中，是有一个User Profile的服务的，也就是说，Windows 的AD帐号中的一些信息，会被用某种特定的方式保存在SharePoint中，这就是所谓的用户配置（User Profile)文件。 <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/b3dd32f1a509_DA8F/image_2.png" target="_blank"><img src="images/1841342-image_thumb.png" alt="image" title="image"></a> 这个用户配置文件是会定期更新的，默认是每天更新一次 <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/b3dd32f1a509_DA8F/image_4.png" target="_blank"><img src="images/1841342-image_thumb_1.png" alt="image" title="image"></a>   好吧，虽然这样的工作原理我们是理解的。 但是，假设我们无法确认用户是否至少登陆过一次，那么有没有办法根据一个用户名或者邮件地址，获取到该用户的信息呢？ 你可能会想到，实际上这需要查询到AD中的信息。没错，但我们应该怎么来完成这样的任务呢？     2.通过代码根据邮件地址查询用户信息</h1>
+<p> 这小段代码虽然很简单，但却解决了我的大问题。</p>
+<pre><code>
+            var user = SPUtility.ResolveWindowsPrincipal(this.Site.WebApplication, &quot;test@xizhang.com&quot;, Microsoft.SharePoint.Utilities.SPPrincipalType.User, true);
+
+            if (user != null)
+                Literal1.Text = string.Format(&quot;UserName:{0},LoginName:{1},Email:{2}&quot;, user.DisplayName, user.LoginName, user.Email);
+            else
+                Literal1.Text = &quot;The user is not exist.&quot;;
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
 
                                 
                                 </section>
@@ -998,8 +1036,12 @@
 
             
                 
+                <a href="2010-10-1841802.html" class="navigation navigation-prev " aria-label="Previous page: Active Directory(活动目录)与Exchange Server编程及相关">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-10-1840655.html" class="navigation navigation-next " aria-label="Next page: WF 4.0中如何实现xaml工作流的动态加载">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1052,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"SharePoint中的用户信息和检索的有关知识","level":"3.13","depth":1,"next":{"title":"WF 4.0中如何实现xaml工作流的动态加载","level":"3.14","depth":1,"path":"2010-10-1840655.md","ref":"2010-10-1840655.md","articles":[]},"previous":{"title":"Active Directory(活动目录)与Exchange Server编程及相关","level":"3.12","depth":1,"path":"2010-10-1841802.md","ref":"2010-10-1841802.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-10-1841342.md","mtime":"2021-11-17T09:20:27.041Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

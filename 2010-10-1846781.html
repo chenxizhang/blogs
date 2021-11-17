@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>如何让一个现有的程序集运行在Silverlight环境中 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-10-1845164.html" />
     
+    
+    <link rel="prev" href="2010-10-1847465.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -282,7 +284,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.8" data-path="2010-10-1846781.html">
+        <li class="chapter active" data-level="3.8" data-path="2010-10-1846781.html">
             
                 <a href="2010-10-1846781.html">
             
@@ -556,7 +558,7 @@
             
         </li>
     
-        <li class="chapter " data-level="5.8" data-path="2010-10-1846781.html">
+        <li class="chapter active" data-level="5.8" data-path="2010-10-1846781.html">
             
                 <a href="2010-10-1846781.html">
             
@@ -830,7 +832,7 @@
             
         </li>
     
-        <li class="chapter " data-level="7.8" data-path="2010-10-1846781.html">
+        <li class="chapter active" data-level="7.8" data-path="2010-10-1846781.html">
             
                 <a href="2010-10-1846781.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >如何让一个现有的程序集运行在Silverlight环境中</a>
     </h1>
 </div>
 
@@ -966,11 +968,90 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="如何让一个现有的程序集运行在silverlight环境中">如何让一个现有的程序集运行在Silverlight环境中</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-10-09, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/10/09/1846781.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/10/09/1846781.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>故事是这样的：我们有一个组件，是一个标准的Class Library，里面有一些代码是实现了某些计算或者业务逻辑。例如下面这样</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_6.png" target="_blank"><img src="images/1846781-image_thumb_2.png" alt="image" title="image"></a></p>
+<p> 然后，我们做了一个Silverlight的应用程序，和一个用于运行该程序的网站</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_8.png" target="_blank"><img src="images/1846781-image_thumb_3.png" alt="image" title="image"></a></p>
+<p> 我们想让这个按钮，能调用DAL中Customer的PlaceOrder方法。这样的要求很自然不过了吧</p>
+<p> 我们马上会想到，要在SilverlightApplication中添加对DAL项目的引用。</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_10.png" target="_blank"><img src="images/1846781-image_thumb_4.png" alt="image" title="image"></a></p>
+<p> 很不幸，我们居然会遇到一个错误<br><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_12.png" target="_blank"><img src="images/1846781-image_thumb_5.png" alt="image" title="image"></a></p>
+<p> 这个错误提示的意思是说，你只能引用Silverlight项目。</p>
+<p> 我们先来说一下如何解决这个问题吧，最后会解释具体的原因。</p>
+<p> 好吧，既然说只能引用Silverlight项目，那么我们就从善如流吧。接下来他们添加一个Silverlight的Class Library</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_14.png" target="_blank"><img src="images/1846781-image_thumb_6.png" alt="image" title="image"></a></p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_16.png" target="_blank"><img src="images/1846781-image_thumb_7.png" alt="image" title="image"></a></p>
+<p> 那么，我们要思考一个问题，既然我们在DAL中写好了那些代码，是否可以在这个项目中进行重用呢？</p>
+<p> 有的童鞋马上会说，把那些cs文件复制过来吧。嗯，脑筋动得还是挺快的，不过。。</p>
+<p> 下面要出绝招了。我们可以将DAL项目中的那些cs文件链接过来，这样就只要维护一份cs文件了，而不要复制多份。</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_18.png" target="_blank"><img src="images/1846781-image_thumb_8.png" alt="image" title="image"></a></p>
+<p> 请注意，这里选择“Add as link”</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_20.png" target="_blank"><img src="images/1846781-image_thumb_9.png" alt="image" title="image"></a></p>
+<p> 赶紧编译一下吧。然后，我们在Silverlight Application中添加对这个DAL的引用</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/Silverlight_F208/image_22.png" target="_blank"><img src="images/1846781-image_thumb_10.png" alt="image" title="image"></a></p>
+<p> 然后编写按钮代码如下</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+
+using DAL;
+
+namespace SilverlightApplication
+{
+    public partial class MainPage : UserControl
+    {
+        public MainPage()
+        {
+            InitializeComponent();
+        }
+
+        private void btTest\_Click(object sender, RoutedEventArgs e)
+        {
+            var customer = new Customer();
+            MessageBox.Show(customer.PlaceOrder().ToString());
+        }
+    }
+}
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p>看起来还不错，不是吗？</p>
+<p>那么，这是为什么呢？这里的根本原因是<strong>Silverlight的运行时（CLR)其实是一个独立的版本，它与所有标准的.NET FRAMEWORK版本下面的CLR都不一样。它只能做一部分事情，而不是全部的事情。（上述的DAL是很简单的一个示例，如果涉及到一些复杂操作，添加为link的方式不一定能编译通过）</strong></p>
+<p>当然，事实上说起来，真的有必要在Silverlight的程序里面嵌入什么很复杂的程序集吗？我想未必。</p>
+<p>尤其是在企业或者商业应用开发的场景下，Silverlight大多是作为一个UI的载体而已，几乎所有的功能（例如与外界资源的交互）都是通过服务来实现的。这里的服务主要指的是WCF服务，当然也不限于此。</p>
 
                                 
                                 </section>
@@ -998,8 +1079,12 @@
 
             
                 
+                <a href="2010-10-1847465.html" class="navigation navigation-prev " aria-label="Previous page: Workflow Foundation 4.0中的事件驱动流程设计和应用（四）">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-10-1845164.html" class="navigation navigation-next " aria-label="Next page: Workflow Foundation 4.0中的事件驱动流程设计和应用（三）">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1095,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"如何让一个现有的程序集运行在Silverlight环境中","level":"3.8","depth":1,"next":{"title":"Workflow Foundation 4.0中的事件驱动流程设计和应用（三）","level":"3.9","depth":1,"path":"2010-10-1845164.md","ref":"2010-10-1845164.md","articles":[]},"previous":{"title":"Workflow Foundation 4.0中的事件驱动流程设计和应用（四）","level":"3.7","depth":1,"path":"2010-10-1847465.md","ref":"2010-10-1847465.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-10-1846781.md","mtime":"2021-11-17T09:20:27.041Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

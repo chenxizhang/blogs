@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>MOSS 2010 Content Type（内容类型）开发中的一个问题及其解决方法 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-11-1867863.html" />
     
+    
+    <link rel="prev" href="2010-11-1870391.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -158,7 +160,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.5" data-path="2010-11-1868286.html">
+        <li class="chapter active" data-level="2.5" data-path="2010-11-1868286.html">
             
                 <a href="2010-11-1868286.html">
             
@@ -432,7 +434,7 @@
             
         </li>
     
-        <li class="chapter " data-level="4.5" data-path="2010-11-1868286.html">
+        <li class="chapter active" data-level="4.5" data-path="2010-11-1868286.html">
             
                 <a href="2010-11-1868286.html">
             
@@ -706,7 +708,7 @@
             
         </li>
     
-        <li class="chapter " data-level="6.5" data-path="2010-11-1868286.html">
+        <li class="chapter active" data-level="6.5" data-path="2010-11-1868286.html">
             
                 <a href="2010-11-1868286.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >MOSS 2010 Content Type（内容类型）开发中的一个问题及其解决方法</a>
     </h1>
 </div>
 
@@ -966,11 +968,141 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="moss-2010-content-type（内容类型）开发中的一个问题及其解决方法">MOSS 2010 Content Type（内容类型）开发中的一个问题及其解决方法</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-11-03, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/11/03/1868286.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/11/03/1868286.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>内容类型是SharePoint中一个很重要的功能，简单地说，它使得我们可以定制列表或者文档库的项目模板。关于这个方面，我以前也写过一些文章介绍，请参考 <a href="http://zzk.cnblogs.com/s?w=blog%3Achenxizhang%20%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B" title="http://zzk.cnblogs.com/s?w=blog%3Achenxizhang%20%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B" target="_blank">http://zzk.cnblogs.com/s?w=blog%3Achenxizhang%20%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B</a>     今天要讲的一个问题，是我们在项目中遇到的，虽然不大，但却是困扰了很久，而且百思不得其解（以前在MOSS 2007的时候却没有这个问题）。 这个问题最近与微软中国这边有关的朋友交流才得到结论，有点让人哭笑不得的。不过，还是要谢谢   范例是一个简单的Solution。我大致介绍一下里面的内容 1. 基于Item这种基类型，创建了一个ContentType,定义了一个特殊的Field，并且定义了特殊的New,Edit,Display页面 （<strong>我们的目的是希望用户使用该类型类型的话，新建，编辑和查看的页面都是我们定制过的</strong>）  </p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Elements xmlns=&quot;http://schemas.microsoft.com/sharepoint/&quot;&gt;
+  &lt;!-- Parent ContentType: Item (0x01) --&gt;
+  &lt;ContentType ID=&quot;0x0100b05ebf7c0a1b48c5aa4aae0a9a8b1067&quot;
+               Name=&quot;SharePointProjectSample - SampleContentType&quot;
+               Group=&quot;Custom Content Types&quot;
+               Description=&quot;My Content Type&quot;
+               Inherits=&quot;TRUE&quot;
+               Version=&quot;0&quot;&gt;
+    &lt;FieldRefs&gt;
+      &lt;FieldRef ID=&quot;{9da97a8a-1da5-4a77-98d3-4bc10456e700}&quot; Name=&quot;Comments&quot; DisplayName=&quot;Comments&quot;/&gt;
+      &lt;FieldRef ID=&quot;{F7D24529-1883-4686-A6DA-6BA772D6CE7D}&quot; Name=&quot;Test&quot; DisplayName=&quot;Test&quot;/&gt;
+    &lt;/FieldRefs&gt;
+    &lt;XmlDocuments&gt;
+      &lt;XmlDocument NamespaceURI=&quot;http://schemas.microsoft.com/sharepoint/v3/contenttype/forms/url&quot;&gt;
+        &lt;FormUrls xmlns=&quot;http://schemas.microsoft.com/sharepoint/v3/contenttype/forms/url&quot;&gt;
+          &lt;New&gt;
+            \_layouts/SharePointProjectSample/New.aspx
+          &lt;/New&gt;
+          &lt;Edit&gt;
+            \_layouts/SharePointProjectSample/Edit.aspx
+          &lt;/Edit&gt;
+          &lt;Display&gt;
+            \_layouts/SharePointProjectSample/Display.aspx
+          &lt;/Display&gt;
+        &lt;/FormUrls&gt;
+      &lt;/XmlDocument&gt;
+    &lt;/XmlDocuments&gt;
+  &lt;/ContentType&gt;
+&lt;/Elements&gt;
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<ol>
+<li>基于上面这个ContentType，我创建了一个ListDefinition</li>
+<li>基于上面这个ListDefinition，我创建了一个ListInstance
+<a href="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/image.png" target="_blank"><img src="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/image_thumb.png" alt="image" title="image"></a>
+解决方案部署，没有发现任何问题。我们可以看到一个新的列表创建起来了。
+<a href="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image001.jpg" target="_blank"><img src="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image001_thumb.jpg" alt="clip_image001" title="clip_image001"></a></li>
+</ol>
+<p>但是，点击”Add new item”的时候，却会发现如下的错误</p>
+<p><a href="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image002.jpg" target="_blank"><img src="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image002_thumb.jpg" alt="clip_image002" title="clip_image002"></a></p>
+<p>我们使用IE 9自带的Developer Tools进行调试看看</p>
+<p><a href="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image0025_thumb.jpg" title="clip_image002[5]" target="_blank">![clip_image002[5]</a>](<a href="http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image0025.jpg" target="_blank">http://www.xizhang.com/blogimages/aed78a59fe7b_F35E/clip_image0025.jpg</a>)</p>
+<p>我们可以看到，其实它确实是想去打开我们那个New.aspx，但我看那个地址编码似乎是有问题的，前面有一串%20,这个应该是空格的意思</p>
+<p>那么，这是为什么呢？其实是因为我们在定义ContentType的时候，那个xml文件中有空格。我们将它修改成下面这样子（请注意粗体部分）</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Elements xmlns=&quot;http://schemas.microsoft.com/sharepoint/&quot;&gt;
+  &lt;!-- Parent ContentType: Item (0x01) --&gt;
+  &lt;ContentType ID=&quot;0x0100b05ebf7c0a1b48c5aa4aae0a9a8b1067&quot;
+               Name=&quot;SharePointProjectSample - SampleContentType&quot;
+               Group=&quot;Custom Content Types&quot;
+               Description=&quot;My Content Type&quot;
+               Inherits=&quot;TRUE&quot;
+               Version=&quot;0&quot;&gt;
+    &lt;FieldRefs&gt;
+      &lt;FieldRef ID=&quot;{9da97a8a-1da5-4a77-98d3-4bc10456e700}&quot; Name=&quot;Comments&quot; DisplayName=&quot;Comments&quot;/&gt;
+      &lt;FieldRef ID=&quot;{F7D24529-1883-4686-A6DA-6BA772D6CE7D}&quot; Name=&quot;Test&quot; DisplayName=&quot;Test&quot;/&gt;
+    &lt;/FieldRefs&gt;
+    &lt;XmlDocuments&gt;
+      &lt;XmlDocument NamespaceURI=&quot;http://schemas.microsoft.com/sharepoint/v3/contenttype/forms/url&quot;&gt;
+        &lt;FormUrls xmlns=&quot;http://schemas.microsoft.com/sharepoint/v3/contenttype/forms/url&quot;&gt;
+ **&lt;New&gt;\_layouts/SharePointProjectSample/New.aspx&lt;/New&gt;
+ &lt;Edit&gt;\_layouts/SharePointProjectSample/Edit.aspx&lt;/Edit&gt;
+ &lt;Display&gt;\_layouts/SharePointProjectSample/Display.aspx&lt;/Display&gt;**
+        &lt;/FormUrls&gt;
+      &lt;/XmlDocument&gt;
+    &lt;/XmlDocuments&gt;
+  &lt;/ContentType&gt;
+&lt;/Elements&gt;
+</code></pre><pre><code>重新部署，页面出来了，整个世界清静了
+</code></pre><pre><code>
+
+</code></pre><pre><code>【备注】个人觉得这个问题应该在产品级别修正掉，而不是给开发人员这种强制性的要求。其实不难的，不是吗，读取那个地址字符串之后，调用trim方法即可。呵呵
+</code></pre><pre><code>
+
+</code></pre><pre><code>目前而言，大家还是稍加注意吧，不要有空格
+</code></pre><pre><code>
+
+</code></pre><pre><code>
+
+</code></pre><pre><code>
+
+</code></pre><pre><code>
+
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
 
                                 
                                 </section>
@@ -998,8 +1130,12 @@
 
             
                 
+                <a href="2010-11-1870391.html" class="navigation navigation-prev " aria-label="Previous page: ASP.NET自定义身份验证的实践">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-11-1867863.html" class="navigation navigation-next " aria-label="Next page: 谈谈IE 9的创新和我的一些建议">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1146,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"MOSS 2010 Content Type（内容类型）开发中的一个问题及其解决方法","level":"2.5","depth":1,"next":{"title":"谈谈IE 9的创新和我的一些建议","level":"2.6","depth":1,"path":"2010-11-1867863.md","ref":"2010-11-1867863.md","articles":[]},"previous":{"title":"ASP.NET自定义身份验证的实践","level":"2.4","depth":1,"path":"2010-11-1870391.md","ref":"2010-11-1870391.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-11-1868286.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

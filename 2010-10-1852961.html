@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>Powershell简介及其编程访问 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-10-1849917.html" />
     
+    
+    <link rel="prev" href="2010-10-1857745.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -230,7 +232,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4" data-path="2010-10-1852961.html">
+        <li class="chapter active" data-level="3.4" data-path="2010-10-1852961.html">
             
                 <a href="2010-10-1852961.html">
             
@@ -504,7 +506,7 @@
             
         </li>
     
-        <li class="chapter " data-level="5.4" data-path="2010-10-1852961.html">
+        <li class="chapter active" data-level="5.4" data-path="2010-10-1852961.html">
             
                 <a href="2010-10-1852961.html">
             
@@ -778,7 +780,7 @@
             
         </li>
     
-        <li class="chapter " data-level="7.4" data-path="2010-10-1852961.html">
+        <li class="chapter active" data-level="7.4" data-path="2010-10-1852961.html">
             
                 <a href="2010-10-1852961.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >Powershell简介及其编程访问</a>
     </h1>
 </div>
 
@@ -966,11 +968,92 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="powershell简介及其编程访问">Powershell简介及其编程访问</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-10-16, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/10/16/1852961.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/10/16/1852961.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>Powershell是下一代的命令行外壳程序，较之于它的前身（cmd.exe)，它的功能更加强大，也更加易用。最根本的区别在于它是基于对象的操作（基于.NET Framework)，而不是基于字符串的操作。</p>
+<p> 这个工具可以单独使用，完全可以取代cmd.exe。例如如下</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_2.png" target="_blank"><img src="images/1852961-image_thumb.png" alt="image" title="image"></a></p>
+<p> 但它的功能远不止于此，例如我们可以很容易地获取所有的进程名称</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_8.png" target="_blank"><img src="images/1852961-image_thumb_3.png" alt="image" title="image"></a></p>
+<p> 再来看一个，下面这个例子是获取当前正在运行的服务列表。（可以用条件很方便地筛选）</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_10.png" target="_blank"><img src="images/1852961-image_thumb_4.png" alt="image" title="image"></a></p>
+<p> 除此之外，Powershell还支持定制，例如微软很多产品都提供了专门的Powershell插件（典型的有：SQL Server，SharePoint Server, Exchange Server等）</p>
+<p> 通过这些特殊的外壳，可以实现对服务器的管理。功能非常强大。例如下面的SQLPS，可以像查看文件夹那样查看数据库</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_12.png" target="_blank"><img src="images/1852961-image_thumb_5.png" alt="image" title="image"></a></p>
+<p> 再例如下图的EMS(Exchange Managment Shell)，可以对一个地址列表进行修改</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_14.png" target="_blank"><img src="images/1852961-image_thumb_6.png" alt="image" title="image"></a></p>
+<p> 看起来还不错吧，关于Powershell的更多细节，大家有兴趣的话，可以参考微软有关的文档。</p>
+<p> 接下来谈另外一个话题，Powershell这么强大，但终究是手工地操作，能不能在程序中调用它，并且执行有关的操作呢？</p>
+<p> 答案是：可以的。</p>
+<p> 下面我们来看一个小的例子</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_16.png" target="_blank"><img src="images/1852961-image_thumb_7.png" alt="image" title="image"></a></p>
+<p> 添加一个引用。这个程序集在C:\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0目录中</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_18.png" target="_blank"><img src="images/1852961-image_thumb_8.png" alt="image" title="image"></a></p>
+<p> 编写如下简单的代码</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
+using System.Diagnostics;
+
+namespace PowershellInvoker
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+
+            var piple = runspace.CreatePipeline(&quot;Get-Process&quot;);
+            var result = piple.Invoke().Select(p =&gt; p.BaseObject).Cast&lt;Process&gt;();
+
+            foreach (var item in result)
+            {
+                Console.WriteLine(&quot;{0}\t{1}\t{2}&quot;,
+                    item.Id.ToString().PadRight(30),
+                    item.ProcessName.PadRight(30),
+                    item.Threads.Count);
+
+
+            }
+
+            Console.Read();
+        }
+    }
+}
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/CPowershell_9A8B/image_20.png" target="_blank"><img src="images/1852961-image_thumb_9.png" alt="image" title="image"></a></p>
+<p>是的，Powershell据是基于.NET Framework的对象操作</p>
+<p><strong>so， what are you think about that?<img src="images/1852961-wlEmoticon-winkingsmile_2.png" alt="Winking smile"></strong></p>
 
                                 
                                 </section>
@@ -998,8 +1081,12 @@
 
             
                 
+                <a href="2010-10-1857745.html" class="navigation navigation-prev " aria-label="Previous page: 小技巧：如何管理保存在本地的用户凭据">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-10-1849917.html" class="navigation navigation-next " aria-label="Next page: 推荐几个有关Silverlight和Prism的学习资源">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1097,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Powershell简介及其编程访问","level":"3.4","depth":1,"next":{"title":"推荐几个有关Silverlight和Prism的学习资源","level":"3.5","depth":1,"path":"2010-10-1849917.md","ref":"2010-10-1849917.md","articles":[]},"previous":{"title":"小技巧：如何管理保存在本地的用户凭据","level":"3.3","depth":1,"path":"2010-10-1857745.md","ref":"2010-10-1857745.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-10-1852961.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>ASP.NET自定义身份验证的实践 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-11-1868286.html" />
     
+    
+    <link rel="prev" href="2010-11-1870924.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -145,7 +147,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.4" data-path="2010-11-1870391.html">
+        <li class="chapter active" data-level="2.4" data-path="2010-11-1870391.html">
             
                 <a href="2010-11-1870391.html">
             
@@ -419,7 +421,7 @@
             
         </li>
     
-        <li class="chapter " data-level="4.4" data-path="2010-11-1870391.html">
+        <li class="chapter active" data-level="4.4" data-path="2010-11-1870391.html">
             
                 <a href="2010-11-1870391.html">
             
@@ -693,7 +695,7 @@
             
         </li>
     
-        <li class="chapter " data-level="6.4" data-path="2010-11-1870391.html">
+        <li class="chapter active" data-level="6.4" data-path="2010-11-1870391.html">
             
                 <a href="2010-11-1870391.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >ASP.NET自定义身份验证的实践</a>
     </h1>
 </div>
 
@@ -966,11 +968,431 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="aspnet自定义身份验证的实践">ASP.NET自定义身份验证的实践</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-11-06, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/11/06/1870391.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/11/06/1870391.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>事情是这样的：有一套ASP.NET应用程序，用户一般会用工号登录，但是我们希望在应用程序中方便地访问到该用户相关的其他信息，例如用户名或者工厂名称。</p>
+<p> 按照标准的ASP.NET Membership的做法，它不能提供这样的信息。Page.User.Identity.Name只是返回用户登录时使用的名称，在本例中是工号。</p>
+<p> 我们的目标是，<strong>能不能实现Page.User.Identity.Name显示用户的真实名称，而不是工号，甚至还可以显示其他的一些信息。</strong></p>
+<p> 要实现这样的功能，我的思路是自定义身份验证。下面就是我的步骤，可以供大家参考</p>
+<h1 id="第一步：自定义identity"> 第一步：自定义Identity</h1>
+<p> Identity在安全设计中很重要，他一般代表了用户标识。本例中，我们添加了几个特殊的属性</p>
+<pre><code>    public class SECIdentity : IIdentity
+    {
+
+
+        public string DisplayName { get; set; }
+        public string Factory { get; set; }
+        public string Name { get; set; }
+
+
+
+
+        public string AuthenticationType
+        {
+            get { return &quot;Custom Authentication&quot;; }
+        }
+
+        public bool IsAuthenticated
+        {
+            get { return true; }
+        }
+        public override string ToString()
+        {
+            return string.Format(&quot;{0},{1}&quot;, Factory, DisplayName);
+        }
+    }
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<h1 id="第二步：自定义principal">第二步：自定义Principal</h1>
+<p>一个用户不仅需要有名称等基本信息，它还应该具有另外一些信息，例如角色等等。这可以通过封装成一个Principal来解决</p>
+<pre><code>    public class SECPrincipal : IPrincipal
+    {
+        public SECPrincipal(string name, string displayName, string factory)
+        {
+            identity = new SECIdentity()
+            {
+                Name = name,
+                DisplayName = displayName,
+                Factory = factory
+            };
+        }
+        private IIdentity identity;
+        public IIdentity Identity
+        {
+            get
+            {
+                return identity;
+            }
+        }
+
+        public bool IsInRole(string role)
+        {
+            return true;
+        }
+    }
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<h1 id="第三步：自定义membershipprovider">第三步：自定义MembershipProvider</h1>
+<p>我们需要有一个特殊的Provider，来读取自定义数据库，校验用户，并且把有关的数据都一起读出来</p>
+<p>请注意，作为演示，我只是实现了这个Provider的一个方法：ValidateUser.其他的方法都没有实现</p>
+<pre><code>    public class SECMembershipProvider:MembershipProvider
+    {
+
+        public override string ApplicationName
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override bool ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool DeleteUser(string username, bool deleteAllRelatedData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool EnablePasswordReset
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override bool EnablePasswordRetrieval
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetNumberOfUsersOnline()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetPassword(string username, string answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override MembershipUser GetUser(string username, bool userIsOnline)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetUserNameByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int MaxInvalidPasswordAttempts
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override int MinRequiredNonAlphanumericCharacters
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override int MinRequiredPasswordLength
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override int PasswordAttemptWindow
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override MembershipPasswordFormat PasswordFormat
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override string PasswordStrengthRegularExpression
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override bool RequiresQuestionAndAnswer
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override bool RequiresUniqueEmail
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override string ResetPassword(string username, string answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool UnlockUser(string userName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UpdateUser(MembershipUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ValidateUser(string username, string password)
+        {
+            //这里可以实际读取数据库，对用户名和密码进行校验
+            if (username == &quot;007&quot; &amp;&amp; password == &quot;password&quot;)
+            {
+
+                var cookie = new HttpCookie(username + &quot;\_data&quot;);
+
+                cookie.Values.Add(&quot;displayName&quot;, &quot;ares&quot;);
+                cookie.Values.Add(&quot;factory&quot;, &quot;shanghai&quot;);
+                HttpContext.Current.Response.Cookies.Add(cookie);
+
+                return true;
+
+            }
+            return false;
+        }
+
+
+    }
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p>大家注意这个ValidateUser方法，我们除了校验用户之外，还可以将用户的displayName和factory读取出来，放在cookie里面。这是为了下一步做准备。</p>
+<h1 id="第四步：注册使用这个membershipprovider">第四步：注册使用这个MembershipProvider</h1>
+<pre><code>        &lt;membership defaultProvider=&quot;SECMembershipProvider&quot;&gt;
+            &lt;providers&gt;
+                &lt;clear/&gt;
+        &lt;add name=&quot;SECMembershipProvider&quot; type=&quot;MvcApplicationSample.Extensions.SECMembershipProvider,MvcApplicationSample&quot;/&gt;
+                &lt;add name=&quot;AspNetSqlMembershipProvider&quot; type=&quot;System.Web.Security.SqlMembershipProvider&quot; connectionStringName=&quot;ApplicationServices&quot; enablePasswordRetrieval=&quot;false&quot; enablePasswordReset=&quot;true&quot; requiresQuestionAndAnswer=&quot;false&quot; requiresUniqueEmail=&quot;false&quot; maxInvalidPasswordAttempts=&quot;5&quot; minRequiredPasswordLength=&quot;6&quot; minRequiredNonalphanumericCharacters=&quot;0&quot; passwordAttemptWindow=&quot;10&quot; applicationName=&quot;/&quot;/&gt;
+            &lt;/providers&gt;
+        &lt;/membership&gt;
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<h1 id="第五步：修改httpcontextuser属性">第五步：修改HttpContext.User属性</h1>
+<p>这是我们至关重要的一步。我们希望替换掉默认那个HttpContext.User。</p>
+<p>请注意，这个操作必须在一个特殊事件中来完成。请转到global.asax文件中，添加如下代码</p>
+<pre><code>        void Application\_PostAuthenticateRequest(object sender, EventArgs e)
+        {
+            var app = (HttpApplication)sender;
+            if (app.User.Identity.IsAuthenticated)
+            {
+                var userName = app.User.Identity.Name;
+                var cookie = app.Request.Cookies[userName + &quot;\_data&quot;];
+                var displayName = cookie.Values[&quot;displayName&quot;];
+                var factory = cookie.Values[&quot;factory&quot;];
+
+                HttpContext.Current.User= new Extensions.SECPrincipal(userName, displayName, factory);
+            }
+
+        }
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<h1 id="第六步：使用自定义的principal">第六步：使用自定义的Principal</h1>
+<p>我们在页面中，就可以很容易地使用自定义的这个Principal了。</p>
+<pre><code>    Welcome &lt;b&gt;&lt;%: Page.User.Identity.ToString() %&gt;
+</code></pre><p>下面是一个最后的结果。这个项目是最近做给客户做MVC理论和实践课程中的一个范例。仅供参考</p>
+<p><a href="http://www.xizhang.com/blogimages/fe970ef26b75_5DBE/image.png" target="_blank"><img src="http://www.xizhang.com/blogimages/fe970ef26b75_5DBE/image_thumb.png" alt="image" title="image"></a></p>
+<p><a href="http://www.xizhang.com/blogimages/fe970ef26b75_5DBE/image_3.png" target="_blank"><img src="http://www.xizhang.com/blogimages/fe970ef26b75_5DBE/image_thumb_3.png" alt="image" title="image"></a></p>
+<p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
 
                                 
                                 </section>
@@ -998,8 +1420,12 @@
 
             
                 
+                <a href="2010-11-1870924.html" class="navigation navigation-prev " aria-label="Previous page: 【MOSS 2010】 如何开发一个自定义的WebPart来承载Silverlight应用程序">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-11-1868286.html" class="navigation navigation-next " aria-label="Next page: MOSS 2010 Content Type（内容类型）开发中的一个问题及其解决方法">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1436,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"ASP.NET自定义身份验证的实践","level":"2.4","depth":1,"next":{"title":"MOSS 2010 Content Type（内容类型）开发中的一个问题及其解决方法","level":"2.5","depth":1,"path":"2010-11-1868286.md","ref":"2010-11-1868286.md","articles":[]},"previous":{"title":"【MOSS 2010】 如何开发一个自定义的WebPart来承载Silverlight应用程序","level":"2.3","depth":1,"path":"2010-11-1870924.md","ref":"2010-11-1870924.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-11-1870391.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

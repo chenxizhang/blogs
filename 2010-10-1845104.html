@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>Workflow Foundation 4.0中的事件驱动流程设计和应用（一） · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-10-1841802.html" />
     
+    
+    <link rel="prev" href="2010-10-1845136.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -321,7 +323,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.11" data-path="2010-10-1845104.html">
+        <li class="chapter active" data-level="3.11" data-path="2010-10-1845104.html">
             
                 <a href="2010-10-1845104.html">
             
@@ -595,7 +597,7 @@
             
         </li>
     
-        <li class="chapter " data-level="5.11" data-path="2010-10-1845104.html">
+        <li class="chapter active" data-level="5.11" data-path="2010-10-1845104.html">
             
                 <a href="2010-10-1845104.html">
             
@@ -869,7 +871,7 @@
             
         </li>
     
-        <li class="chapter " data-level="7.11" data-path="2010-10-1845104.html">
+        <li class="chapter active" data-level="7.11" data-path="2010-10-1845104.html">
             
                 <a href="2010-10-1845104.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >Workflow Foundation 4.0中的事件驱动流程设计和应用（一）</a>
     </h1>
 </div>
 
@@ -966,11 +968,237 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="workflow-foundation-40中的事件驱动流程设计和应用（一）">Workflow Foundation 4.0中的事件驱动流程设计和应用（一）</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-10-07, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/10/07/1845104.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/10/07/1845104.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>已经有不少朋友知道Workflow Foundation 4了。这个版本较之于以往有了一些明显的区别，开发的一些思路也大不相同了。</p>
+<p> 很多人会觉得很怀念以前3.0中的“顺序工作流”和“状态机工作流”的分类，其实大可不必。在4.0中虽然没有称之为“状态机工作流”的东西，但其实实现起来也很自然.WF 4提供了FlowChart的功能，其实就是状态机工作流。（它的不同Decision之间可以转化，而这正是状态机与顺序工作流的根本区别）</p>
+<p> 这一篇不是用来讨论状态机工作流这个话题的，提一下只是想说，大家要抓住重点，而不是表象。</p>
+<p> 专门写一篇来介绍一下所谓事件驱动的流程设计和应用，是因为</p>
+<ul>
+<li><p>首先，没有太多流程不需要用户交互，而如果需要用户交互，就得通过事件这样的机制。（无论是顺序型还是状态机）</p>
+<ul>
+<li>其次，没有太多文章和例子介绍这些细节，但WF4中的做法也不是很直观，一般人要理解起来还是蛮吃力的。</li>
+</ul>
+<p>我们来假想这样一个场景，我们需要有一个文档审批的流程。很显然流程是不会自动启动的，它得由用户发出一个指令（通常是在界面上填写了一些数据，然后点击了一个按钮）。那么，这样的功能要怎么实现呢？</p>
+<p>那么，就让我们开始吧</p>
+</li>
+</ul>
+<p> 【备注】本文代码，可以通过 <a href="http://files.cnblogs.com/chenxizhang/WFEventDriven(1" target="_blank">这里</a>.rar) 下载</p>
+<h1 id="1创建一个activity-library"> 1.创建一个Activity Library.</h1>
+<p> 请注意,我建议你创建Activity Library,不要为了省事就创建WCF Workflow Service Application或者Workflow Console Application.因为那样既不实用（你不可能在项目中这么做），也会隐藏很多细节。</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_2.png" target="_blank"><img src="images/1845104-image_thumb.png" alt="image" title="image"></a></p>
+<p> 将默认的那个Activity1.xaml删除掉，然后添加一个DocumentReviewWorkflow</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_4.png" target="_blank"><img src="images/1845104-image_thumb_1.png" alt="image" title="image"></a></p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_6.png" target="_blank"><img src="images/1845104-image_thumb_2.png" alt="image" title="image"></a></p>
+<h1 id="2-修改这个workflow的设计"> 2. 修改这个workflow的设计</h1>
+<p> 在WF 4中，对Activity进行了全新的设计，3.0中的Activity几乎一个不留了。对于事件监听而言，现在是使用一个所谓的Pick的Activity</p>
+<p> 我们这个流程首先需要能够监控用户创建表单的一个行为（事件），所以，我们需要添加这样一个Pick</p>
+<p> 大致是这样的设计过程：</p>
+<p> 2.1 拖放一个Sequence到设计器中</p>
+<p> 2.2 拖放一个Pick到Sequence中，默认会有两个PickBranch，删除其中的一个</p>
+<p> 2.3 拖放一个Receive到PickBranch的Trigger里面（我们设置了这个Receive的ServiceContractName，和OperationName，你可以随便取名，没有太多限制。这里其实是使用了WCF的技术。这是WF 4的一个很大的特点：与WCF结合得很紧密）</p>
+<p> 2.4 定义一个TicketId的变量，用来保存流程编号</p>
+<p> 2.5 拖放一个Assign 和WriteLine到PickBranch的Action中。（作为响应，我们只是随机产生一个流程编号，然后输出它）</p>
+<p> <a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_8.png" target="_blank"><img src="images/1845104-image_thumb_3.png" alt="image" title="image"></a></p>
+<p> 这个设计过程，将得到下面这样的xaml.我这里就不一一截图了。如果觉得有必要，直接将这段xaml覆盖掉你的设计即可看到效果。</p>
+<pre><code>&lt;Activity mc:Ignorable=&quot;sap&quot; x:Class=&quot;DocumentReviewLib.DocumentReviewWorkflow&quot; sap:VirtualizedContainerService.HintSize=&quot;470,711&quot; mva:VisualBasic.Settings=&quot;Assembly references and imported namespaces for internal implementation&quot; xmlns=&quot;http://schemas.microsoft.com/netfx/2009/xaml/activities&quot; xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot; xmlns:mv=&quot;clr-namespace:Microsoft.VisualBasic;assembly=System&quot; xmlns:mva=&quot;clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities&quot; xmlns:p=&quot;http://schemas.microsoft.com/netfx/2009/xaml/servicemodel&quot; xmlns:s=&quot;clr-namespace:System;assembly=mscorlib&quot; xmlns:s1=&quot;clr-namespace:System;assembly=System&quot; xmlns:s2=&quot;clr-namespace:System;assembly=System.Xml&quot; xmlns:s3=&quot;clr-namespace:System;assembly=System.Core&quot; xmlns:s4=&quot;clr-namespace:System;assembly=System.ServiceModel&quot; xmlns:sa=&quot;clr-namespace:System.Activities;assembly=System.Activities&quot; xmlns:sad=&quot;clr-namespace:System.Activities.Debugger;assembly=System.Activities&quot; xmlns:sap=&quot;http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation&quot; xmlns:scg=&quot;clr-namespace:System.Collections.Generic;assembly=System&quot; xmlns:scg1=&quot;clr-namespace:System.Collections.Generic;assembly=System.ServiceModel&quot; xmlns:scg2=&quot;clr-namespace:System.Collections.Generic;assembly=System.Core&quot; xmlns:scg3=&quot;clr-namespace:System.Collections.Generic;assembly=mscorlib&quot; xmlns:sd=&quot;clr-namespace:System.Data;assembly=System.Data&quot; xmlns:sl=&quot;clr-namespace:System.Linq;assembly=System.Core&quot; xmlns:st=&quot;clr-namespace:System.Text;assembly=mscorlib&quot; xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;&gt;
+  &lt;Sequence DisplayName=&quot;文档审批流程&quot; sad:XamlDebuggerXmlReader.FileName=&quot;d:\temp\WF4EventDrivenSolution\DocumentReviewLib\DocumentReviewWorkflow.xaml&quot; sap:VirtualizedContainerService.HintSize=&quot;430,671&quot;&gt;
+    &lt;Sequence.Variables&gt;
+      &lt;Variable x:TypeArguments=&quot;x:Int32&quot; Default=&quot;-1&quot; Name=&quot;TicketId&quot; /&gt;
+    &lt;/Sequence.Variables&gt;
+    &lt;sap:WorkflowViewStateService.ViewState&gt;
+      &lt;scg3:Dictionary x:TypeArguments=&quot;x:String, x:Object&quot;&gt;
+        &lt;x:Boolean x:Key=&quot;IsExpanded&quot;&gt;True&lt;/x:Boolean&gt;
+      &lt;/scg3:Dictionary&gt;
+    &lt;/sap:WorkflowViewStateService.ViewState&gt;
+    &lt;Pick DisplayName=&quot;文档创建&quot; sap:VirtualizedContainerService.HintSize=&quot;408,547&quot;&gt;
+      &lt;PickBranch DisplayName=&quot;用户提交了一个新的流程&quot; sap:VirtualizedContainerService.HintSize=&quot;294,501&quot;&gt;
+        &lt;PickBranch.Trigger&gt;
+          &lt;p:Receive DisplayName=&quot;收到用户的消息&quot; sap:VirtualizedContainerService.HintSize=&quot;264,100&quot; OperationName=&quot;CreateTicket&quot; ServiceContractName=&quot;IDocumentReview&quot; /&gt;
+        &lt;/PickBranch.Trigger&gt;
+        &lt;Sequence DisplayName=&quot;事件响应&quot; sap:VirtualizedContainerService.HintSize=&quot;264,283&quot;&gt;
+          &lt;sap:WorkflowViewStateService.ViewState&gt;
+            &lt;scg3:Dictionary x:TypeArguments=&quot;x:String, x:Object&quot;&gt;
+              &lt;x:Boolean x:Key=&quot;IsExpanded&quot;&gt;True&lt;/x:Boolean&gt;
+            &lt;/scg3:Dictionary&gt;
+          &lt;/sap:WorkflowViewStateService.ViewState&gt;
+          &lt;Assign DisplayName=&quot;随机产生一个流程编号&quot; sap:VirtualizedContainerService.HintSize=&quot;242,58&quot;&gt;
+            &lt;Assign.To&gt;
+              &lt;OutArgument x:TypeArguments=&quot;x:Int32&quot;&gt;[TicketId]&lt;/OutArgument&gt;
+            &lt;/Assign.To&gt;
+            &lt;Assign.Value&gt;
+              &lt;InArgument x:TypeArguments=&quot;x:Int32&quot;&gt;[New Random().Next()]&lt;/InArgument&gt;
+            &lt;/Assign.Value&gt;
+          &lt;/Assign&gt;
+          &lt;WriteLine DisplayName=&quot;输出信息&quot; sap:VirtualizedContainerService.HintSize=&quot;242,61&quot; Text=&quot;[&amp;quot;流程被创建，编号为:&amp;quot; &amp;amp; TicketId]&quot; /&gt;
+        &lt;/Sequence&gt;
+      &lt;/PickBranch&gt;
+    &lt;/Pick&gt;
+  &lt;/Sequence&gt;
+&lt;/Activity&gt;
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<h1 id="3-设计一个宿主程序">3. 设计一个宿主程序</h1>
+<p>流程设计好之后，我们如何将它托管起来，并且允许客户端发出流程有关的操作呢</p>
+<p>我们需要设计一个宿主。为简便起见，我们可以用Console来做为宿主。</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_10.png" target="_blank"><img src="images/1845104-image_thumb_4.png" alt="image" title="image"></a></p>
+<p>同时，我们需要添加几个程序集的引用</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_12.png" target="_blank"><img src="images/1845104-image_thumb_5.png" alt="image" title="image"></a></p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_16.png" target="_blank"><img src="images/1845104-image_thumb_7.png" alt="image" title="image"></a></p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_14.png" target="_blank"><img src="images/1845104-image_thumb_6.png" alt="image" title="image"></a></p>
+<p>然后，修改Main方法，代码如下</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.ServiceModel;
+using System.Activities;
+using System.ServiceModel.Activities;
+using System.ServiceModel.Description;
+
+namespace Host
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var host = new WorkflowServiceHost(
+                new DocumentReviewLib.DocumentReviewWorkflow(),
+                new Uri(&quot;http://localhost:8080/DRS&quot;));
+
+            host.AddDefaultEndpoints();
+            host.Description.Behaviors.Add(
+                new ServiceMetadataBehavior() { HttpGetEnabled = true });
+
+            host.AddServiceEndpoint(
+                &quot;IMetadataExchange&quot;,
+                MetadataExchangeBindings.CreateMexHttpBinding(),
+                &quot;mex&quot;);
+
+            host.Open();
+            Console.WriteLine(&quot;Server is ready.&quot;);
+            Console.Read();
+
+        }
+    }
+}
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p>这里，我们创建了一个所谓的WorkflowServiceHost（其实这是一个特殊的WCF中的ServiceHost对象），启动了在8080端口的监听</p>
+<p>启动Host的调试（如果是Vista或Win7),请将Visual Studio run as administrator，如果没有出什么意外的话，你可以看到下面这样的一个窗口</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_18.png" target="_blank"><img src="images/1845104-image_thumb_8.png" alt="image" title="image"></a></p>
+<p>然后，你在浏览器中输入下面的地址，可以看到</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_20.png" target="_blank"><img src="images/1845104-image_thumb_9.png" alt="image" title="image"></a></p>
+<p>这就表示服务已经成功启动了。</p>
+<p>根据上面页面的提示，我们可以产生一个服务代理类。注意，要使用Visual Studio Command Prompt，而不是默认的cmd</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_22.png" target="_blank"><img src="images/1845104-image_thumb_10.png" alt="image" title="image"></a></p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_24.png" target="_blank"><img src="images/1845104-image_thumb_11.png" alt="image" title="image"></a></p>
+<h1 id="4-设计一个客户端程序">4. 设计一个客户端程序</h1>
+<p>我们接下来要设计一个Windows Forms的客户端程序，来使用该服务，发起流程的操作</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_26.png" target="_blank"><img src="images/1845104-image_thumb_12.png" alt="image" title="image"></a></p>
+<p>将刚才工具所生成的两个文件添加到当前项目，并且将output.config修改为app.config</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_28.png" target="_blank"><img src="images/1845104-image_thumb_13.png" alt="image" title="image"></a></p>
+<p>添加对System.ServiceModel的引用</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_30.png" target="_blank"><img src="images/1845104-image_thumb_14.png" alt="image" title="image"></a></p>
+<p>修改窗口的设计如下</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_32.png" target="_blank"><img src="images/1845104-image_thumb_15.png" alt="image" title="image"></a></p>
+<p>代码如下</p>
+<pre><code>        private void btCreate\_Click(object sender, EventArgs e)
+        {
+            var proxy = new DocumentReviewClient();
+            proxy.CreateTicket();
+        }
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p>是不是很简单呢？其实这里就是WCF调用。（有在WF3中做过流程开发的朋友一定不会陌生，以前我们也是自己定义WCF服务来实现客户端与服务器端的通讯）</p>
+<p>那么，现在可以进行调试了。</p>
+<h1 id="5-调试流程">5. 调试流程</h1>
+<p>因为既要启动服务器，又要启动客户端，所以我们可以设置一下启动项目顺序</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_34.png" target="_blank"><img src="images/1845104-image_thumb_16.png" alt="image" title="image"></a></p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_36.png" target="_blank"><img src="images/1845104-image_thumb_17.png" alt="image" title="image"></a></p>
+<p>接下来，就可以按下F5键进行调试了</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_38.png" target="_blank"><img src="images/1845104-image_thumb_18.png" alt="image" title="image"></a></p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_40.png" target="_blank"><img src="images/1845104-image_thumb_19.png" alt="image" title="image"></a></p>
+<p>然后，我们点击“创建流程”按钮。我们并没有发现什么。流程并没有被启动。这是为什么呢？</p>
+<p>放心，没有什么大不了的，这只是我预先设计好的一个“陷阱”而已。我是想让大家明白，所有的WCF调用，默认都不会启动流程，除非有一个属性设置为true。这就是那个Receive Activity的CanCreateInstance属性，我们可以回到DocumentReviewLib中，将其设置为true。因为它默认是false。这个属性的意思是说，如果收到这个事件，那么要不要创建工作流的实例。一般在一个流程的顶部事件中，都是设置为true的</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_42.png" target="_blank"><img src="images/1845104-image_thumb_20.png" alt="image" title="image"></a></p>
+<p>再次按下F5键，进行调试，然后点击“创建流程”按钮</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_44.png" target="_blank"><img src="images/1845104-image_thumb_21.png" alt="image" title="image"></a></p>
+<p>这样看起来，流程确实被创建了。如果我们点击多次呢？毫无疑问，它会有多个实例产生出来</p>
+<p><a href="http://images.cnblogs.com/cnblogs_com/chenxizhang/Windows-Live-Writer/efd06ad0b37c_BDDB/image_46.png" target="_blank"><img src="images/1845104-image_thumb_22.png" alt="image" title="image"></a></p>
+<p>看起来不错，不是吗？我们从客户端发起了一个操作，它将被工作流收到消息，并且进行了相应的处理。（我们这里只是输出消息，你可以想象一下，你完全可以在这里更新数据库的记录）</p>
+<p>那么，接下来有一个话题，一般情况下，我们一个流程都不止一个事件，例如发起流程之后，需要将这个编号返回给客户端，同时还要等待经理审批。如此这般的需求怎么实现呢？</p>
+<p>我在下一篇先介绍一下，如何将处理结果发回给客户端。</p>
+<p>然后，第三篇介绍如何实现审批事件。</p>
+<p>【备注】本文代码，可以通过 <a href="http://files.cnblogs.com/chenxizhang/WFEventDriven(1" target="_blank">这里</a>.rar) 下载</p>
 
                                 
                                 </section>
@@ -998,8 +1226,12 @@
 
             
                 
+                <a href="2010-10-1845136.html" class="navigation navigation-prev " aria-label="Previous page: Workflow Foundation 4.0中的事件驱动流程设计和应用（二）">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-10-1841802.html" class="navigation navigation-next " aria-label="Next page: Active Directory(活动目录)与Exchange Server编程及相关">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1242,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Workflow Foundation 4.0中的事件驱动流程设计和应用（一）","level":"3.11","depth":1,"next":{"title":"Active Directory(活动目录)与Exchange Server编程及相关","level":"3.12","depth":1,"path":"2010-10-1841802.md","ref":"2010-10-1841802.md","articles":[]},"previous":{"title":"Workflow Foundation 4.0中的事件驱动流程设计和应用（二）","level":"3.10","depth":1,"path":"2010-10-1845136.md","ref":"2010-10-1845136.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-10-1845104.md","mtime":"2021-11-17T09:20:27.041Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

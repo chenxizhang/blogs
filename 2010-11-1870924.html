@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>【MOSS 2010】 如何开发一个自定义的WebPart来承载Silverlight应用程序 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-11-1870391.html" />
     
+    
+    <link rel="prev" href="2010-11-1870952.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -132,7 +134,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.3" data-path="2010-11-1870924.html">
+        <li class="chapter active" data-level="2.3" data-path="2010-11-1870924.html">
             
                 <a href="2010-11-1870924.html">
             
@@ -406,7 +408,7 @@
             
         </li>
     
-        <li class="chapter " data-level="4.3" data-path="2010-11-1870924.html">
+        <li class="chapter active" data-level="4.3" data-path="2010-11-1870924.html">
             
                 <a href="2010-11-1870924.html">
             
@@ -680,7 +682,7 @@
             
         </li>
     
-        <li class="chapter " data-level="6.3" data-path="2010-11-1870924.html">
+        <li class="chapter active" data-level="6.3" data-path="2010-11-1870924.html">
             
                 <a href="2010-11-1870924.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >【MOSS 2010】 如何开发一个自定义的WebPart来承载Silverlight应用程序</a>
     </h1>
 </div>
 
@@ -966,11 +968,113 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="【moss-2010】-如何开发一个自定义的webpart来承载silverlight应用程序">【MOSS 2010】 如何开发一个自定义的WebPart来承载Silverlight应用程序</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-11-07, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/11/07/1870924.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/11/07/1870924.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>在 <a href="http://www.cnblogs.com/chenxizhang/archive/2010/04/06/1705132.html" target="_blank">MOSS 2010：Visual Studio 2010开发体验（8）——Silverlight应用</a> 这篇文章中，我介绍到了在MOSS 2010中提供的对Silverlight支持。它默认提供了一个Silverlight WebPart可以很方便地显示我们的Silverlight应用程序</p>
+<p> 但是也有些朋友问到，如果我们要自己开发一个WebPart实现类似的功能，那么该怎么做呢？</p>
+<p> 【备注】我并不认为这是必须要做的事情，因为我觉得默认那个WebPart绝大部分都能满足要求。</p>
+<p> 如果你确实需要定制自己的WebPart，那么请继续往下读</p>
+<h1 id="第一步：创建silverlight应用程序，并将其编译的结果复制到一个特殊的目录"> 第一步：创建Silverlight应用程序，并将其编译的结果复制到一个特殊的目录</h1>
+<p> 这个目录是：C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\14\TEMPLATE\LAYOUTS\ClientBin</p>
+<p> <a href="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image.png" target="_blank"><img src="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_thumb.png" alt="image" title="image"></a></p>
+<p> <a href="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_3.png" target="_blank"><img src="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_thumb_3.png" alt="image" title="image"></a></p>
+<p> 本例中，我做了一个最简单的Silverlight程序。只有一个按钮。</p>
+<h1 id="第二步：创建sharepoint-visual-webpart项目"> 第二步：创建SharePoint Visual WebPart项目</h1>
+<p> <a href="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_4.png" target="_blank"><img src="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_thumb_4.png" alt="image" title="image"></a></p>
+<p> 在那个ascx文件中，添加如下的内容</p>
+<pre><code>    &lt;style type=&quot;text/css&quot;&gt;
+    html, body {
+        height: 100%;
+        overflow: auto;
+    }
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    #silverlightControlHost {
+        height: 100%;
+        text-align:center;
+    }
+    &lt;/style&gt;
+
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        function onSilverlightError(sender, args) {
+            var appSource = &quot;&quot;;
+            if (sender != null &amp;&amp; sender != 0) {
+                appSource = sender.getHost().Source;
+            }
+
+            var errorType = args.ErrorType;
+            var iErrorCode = args.ErrorCode;
+
+            if (errorType == &quot;ImageError&quot; || errorType == &quot;MediaError&quot;) {
+                return;
+            }
+
+            var errMsg = &quot;Unhandled Error in Silverlight Application &quot; + appSource + &quot;\n&quot;;
+
+            errMsg += &quot;Code: &quot; + iErrorCode + &quot; \n&quot;;
+            errMsg += &quot;Category: &quot; + errorType + &quot; \n&quot;;
+            errMsg += &quot;Message: &quot; + args.ErrorMessage + &quot; \n&quot;;
+
+            if (errorType == &quot;ParserError&quot;) {
+                errMsg += &quot;File: &quot; + args.xamlFile + &quot; \n&quot;;
+                errMsg += &quot;Line: &quot; + args.lineNumber + &quot; \n&quot;;
+                errMsg += &quot;Position: &quot; + args.charPosition + &quot; \n&quot;;
+            }
+            else if (errorType == &quot;RuntimeError&quot;) {
+                if (args.lineNumber != 0) {
+                    errMsg += &quot;Line: &quot; + args.lineNumber + &quot; \n&quot;;
+                    errMsg += &quot;Position: &quot; + args.charPosition + &quot; \n&quot;;
+                }
+                errMsg += &quot;MethodName: &quot; + args.methodName + &quot; \n&quot;;
+            }
+
+            throw new Error(errMsg);
+        }
+    &lt;/script&gt;
+
+    &lt;div id=&quot;silverlightControlHost&quot;&gt;
+        &lt;object data=&quot;data:application/x-silverlight-2,&quot; type=&quot;application/x-silverlight-2&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;
+      **&lt;param name=&quot;source&quot; value=&quot;\_layouts/clientbin/demo.xap&quot;/&gt;**
+          &lt;param name=&quot;onError&quot; value=&quot;onSilverlightError&quot; /&gt;
+          &lt;param name=&quot;background&quot; value=&quot;white&quot; /&gt;
+          &lt;param name=&quot;minRuntimeVersion&quot; value=&quot;3.0.40818.0&quot; /&gt;
+          &lt;param name=&quot;autoUpgrade&quot; value=&quot;true&quot; /&gt;
+          &lt;a href=&quot;http://go.microsoft.com/fwlink/?LinkID=149156&amp;v=3.0.40818.0&quot; style=&quot;text-decoration:none&quot;&gt;
+               &lt;img src=&quot;http://go.microsoft.com/fwlink/?LinkId=108181&quot; alt=&quot;Get Microsoft Silverlight&quot; style=&quot;border-style:none&quot;/&gt;
+          &lt;/a&gt;
+        &lt;/object&gt;&lt;iframe id=&quot;\_sl\_historyFrame&quot; style=&quot;visibility:hidden;height:0px;width:0px;border:0px&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<h1 id="第三步：部署该解决方案，检查结果">第三步：部署该解决方案，检查结果</h1>
+<p><a href="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_5.png" target="_blank"><img src="http://www.xizhang.com/blogimages/MOSS-2010-WebPartSilverlight_63B3/image_thumb_5.png" alt="image" title="image"></a></p>
+<h1 id="总结">总结</h1>
+<p>我们发现，要自己开发一个WebPart来承载Silverlight应用程序，非常容易。</p>
 
                                 
                                 </section>
@@ -998,8 +1102,12 @@
 
             
                 
+                <a href="2010-11-1870952.html" class="navigation navigation-prev " aria-label="Previous page: 使用jquery构造自己的多级菜单">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-11-1870391.html" class="navigation navigation-next " aria-label="Next page: ASP.NET自定义身份验证的实践">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1118,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"【MOSS 2010】 如何开发一个自定义的WebPart来承载Silverlight应用程序","level":"2.3","depth":1,"next":{"title":"ASP.NET自定义身份验证的实践","level":"2.4","depth":1,"path":"2010-11-1870391.md","ref":"2010-11-1870391.md","articles":[]},"previous":{"title":"使用jquery构造自己的多级菜单","level":"2.2","depth":1,"path":"2010-11-1870952.md","ref":"2010-11-1870952.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-11-1870924.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

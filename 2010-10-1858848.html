@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>MVC 2中HandleErrorFilter的问题及其解决方法 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-10-1857745.html" />
     
+    
+    <link rel="prev" href="2010-10-1862898.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -204,7 +206,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.2" data-path="2010-10-1858848.html">
+        <li class="chapter active" data-level="3.2" data-path="2010-10-1858848.html">
             
                 <a href="2010-10-1858848.html">
             
@@ -478,7 +480,7 @@
             
         </li>
     
-        <li class="chapter " data-level="5.2" data-path="2010-10-1858848.html">
+        <li class="chapter active" data-level="5.2" data-path="2010-10-1858848.html">
             
                 <a href="2010-10-1858848.html">
             
@@ -752,7 +754,7 @@
             
         </li>
     
-        <li class="chapter " data-level="7.2" data-path="2010-10-1858848.html">
+        <li class="chapter active" data-level="7.2" data-path="2010-10-1858848.html">
             
                 <a href="2010-10-1858848.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >MVC 2中HandleErrorFilter的问题及其解决方法</a>
     </h1>
 </div>
 
@@ -966,11 +968,130 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="mvc-2中handleerrorfilter的问题及其解决方法">MVC 2中HandleErrorFilter的问题及其解决方法</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-10-23, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/10/23/1858848.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/10/23/1858848.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>近日在使用MVC2的异常处理的时候，遇到一些问题</p>
+<ol>
+<li><p>我们的Error.aspx是没有使用MasterPage</p>
+<p>2.通过如下代码测试</p>
+</li>
+</ol>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MvcApplication1.Controllers
+{
+    [HandleError]
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            throw new ApplicationException();
+
+        }
+
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult Test()
+        {
+            return View(&quot;Error&quot;);
+        }
+    }
+}
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
+<p>我们发现会遇到500错误</p>
+<p><a href="http://www.xizhang.com/blogimages/4d5a81d0aa6f_6CC9/image.png" target="_blank"><img src="http://www.xizhang.com/blogimages/4d5a81d0aa6f_6CC9/image_thumb.png" alt="image" title="image"></a></p>
+<p>通过工具，我看到下面代码</p>
+<p><a href="http://www.xizhang.com/blogimages/4d5a81d0aa6f_6CC9/image_3.png" target="_blank"><img src="http://www.xizhang.com/blogimages/4d5a81d0aa6f_6CC9/image_thumb_3.png" alt="image" title="image"></a></p>
+<p>其实要讲起来，应该后面三句代码是多余的</p>
+<p>【备注】如果Error.aspx是有MasterPage的时候，又不会出错，这倒是很奇怪的。</p>
+<p>这样的话，其实我们可以定义一个自己的Handler，下面这个例子，我只是把Master的属性和后面三行删除掉了。这样问题就解决了，不管有没有MasterPage，也不管是什么异常都能被Handle了</p>
+<pre><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MvcApplication1
+{
+    public class MyErrorHandler:ActionFilterAttribute,IExceptionFilter
+    {
+        public MyErrorHandler()
+        {
+            View = &quot;Error&quot;;
+        }
+        public void OnException(ExceptionContext filterContext)
+        {
+            string controllerName = (string)filterContext.RouteData.Values[&quot;controller&quot;];
+            string actionName = (string)filterContext.RouteData.Values[&quot;action&quot;];
+            HandleErrorInfo model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
+            ViewResult result = new ViewResult();
+            result.ViewName = this.View;
+            result.ViewData = new ViewDataDictionary&lt;HandleErrorInfo&gt;(model);
+            result.TempData = filterContext.Controller.TempData;
+            filterContext.Result = result;
+            filterContext.ExceptionHandled = true;
+
+        }
+
+        public string View { get; set; }
+    }
+}
+</code></pre><p>.csharpcode, .csharpcode pre
+{
+ font-size: small;
+ color: black;
+ font-family: consolas, &quot;Courier New&quot;, courier, monospace;
+ background-color: #ffffff;
+ /<em>white-space: pre;</em>/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+ background-color: #f4f4f4;
+ width: 100%;
+ margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</p>
 
                                 
                                 </section>
@@ -998,8 +1119,12 @@
 
             
                 
+                <a href="2010-10-1862898.html" class="navigation navigation-prev " aria-label="Previous page: ADO.NET Data Service如何直接支持用Json格式返回数据">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-10-1857745.html" class="navigation navigation-next " aria-label="Next page: 小技巧：如何管理保存在本地的用户凭据">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1135,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"MVC 2中HandleErrorFilter的问题及其解决方法","level":"3.2","depth":1,"next":{"title":"小技巧：如何管理保存在本地的用户凭据","level":"3.3","depth":1,"path":"2010-10-1857745.md","ref":"2010-10-1857745.md","articles":[]},"previous":{"title":"ADO.NET Data Service如何直接支持用Json格式返回数据","level":"3.1","depth":1,"path":"2010-10-1862898.md","ref":"2010-10-1862898.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-10-1858848.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

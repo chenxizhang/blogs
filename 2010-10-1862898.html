@@ -3,7 +3,7 @@
 <html lang="zh" >
     <head>
         <meta charset="UTF-8">
-        <title>简介 · 我的博客</title>
+        <title>ADO.NET Data Service如何直接支持用Json格式返回数据 · 我的博客</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.23">
@@ -56,8 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2010-11-1871436.html" />
+    <link rel="next" href="2010-10-1858848.html" />
     
+    
+    <link rel="prev" href="2010-11-1867863.html" />
     
 
     </head>
@@ -86,7 +88,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -191,7 +193,7 @@
         
         
     
-        <li class="chapter " data-level="3.1" data-path="2010-10-1862898.html">
+        <li class="chapter active" data-level="3.1" data-path="2010-10-1862898.html">
             
                 <a href="2010-10-1862898.html">
             
@@ -465,7 +467,7 @@
         
         
     
-        <li class="chapter " data-level="5.1" data-path="2010-10-1862898.html">
+        <li class="chapter active" data-level="5.1" data-path="2010-10-1862898.html">
             
                 <a href="2010-10-1862898.html">
             
@@ -739,7 +741,7 @@
         
         
     
-        <li class="chapter " data-level="7.1" data-path="2010-10-1862898.html">
+        <li class="chapter active" data-level="7.1" data-path="2010-10-1862898.html">
             
                 <a href="2010-10-1862898.html">
             
@@ -951,7 +953,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >简介</a>
+        <a href="." >ADO.NET Data Service如何直接支持用Json格式返回数据</a>
     </h1>
 </div>
 
@@ -966,11 +968,27 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="我的博客文章汇总">我的博客文章汇总</h1>
+                                <h1 id="adonet-data-service如何直接支持用json格式返回数据">ADO.NET Data Service如何直接支持用Json格式返回数据</h1>
 <blockquote>
-<p>陈希章 2021-11-13</p>
+<p>原文发表于 2010-10-27, 地址: <a href="http://www.cnblogs.com/chenxizhang/archive/2010/10/27/1862898.html" target="_blank">http://www.cnblogs.com/chenxizhang/archive/2010/10/27/1862898.html</a> </p>
 </blockquote>
-<p>这是我在 <a href="https://chenxizhang.cnblogs.com" target="_blank">博客园</a> 的所有文章的一个存档，感谢那个青春的岁月，我从2005年开始撰写技术博客文章，累计大约1400篇。</p>
+<p>今天在介绍WCF及其在项目开发中应用时，再次提到了ADO.NET Data Service。关于这个主题，其实之前我写过不少内容，有兴趣可以参考</p>
+<p> <a href="http://zzk.cnblogs.com/s?w=blog%3Achenxizhang%20ado.net%20data%20service" title="http://zzk.cnblogs.com/s?w=blog%3Achenxizhang%20ado.net%20data%20service" target="_blank">http://zzk.cnblogs.com/s?w=blog%3Achenxizhang%20ado.net%20data%20service</a></p>
+<p> 同时，微软有一篇非常详细的文档</p>
+<p> <a href="http://msdn.microsoft.com/en-us/library/cc907912.aspx" title="http://msdn.microsoft.com/en-us/library/cc907912.aspx" target="_blank">http://msdn.microsoft.com/en-us/library/cc907912.aspx</a></p>
+<p> 我们知道，ADO.NET Data Service是支持两种数据格式的：xml和json.默认是xml（具体来说是atom格式）</p>
+<p> 如下面的效果</p>
+<p> <a href="http://www.xizhang.com/blogimages/ADO.NET-Data-ServiceJson_111AC/image.png" target="_blank"><img src="http://www.xizhang.com/blogimages/ADO.NET-Data-ServiceJson_111AC/image_thumb.png" alt="image" title="image"></a></p>
+<p> 那么，如何让这些结果用json格式返回呢？</p>
+<p> 比较遗憾的是，我们暂时不能直接通过设置就完成这个需求。但是有一个开源的项目，提供了一个解决方案，如下</p>
+<p> <a href="http://code.msdn.microsoft.com/DataServicesJSONP" title="http://code.msdn.microsoft.com/DataServicesJSONP" target="_blank">http://code.msdn.microsoft.com/DataServicesJSONP</a></p>
+<p> The net effect is that if you include this code in your project, you just need to add a single attribute to your Data Service to make it support JSONP:<br>[JSONPSupportBehavior]<br>public class SampleService : DataService<contactsdata><br>{<br>// your service code here...<br>}<br>Once that&apos;s in place you can use JSONP by adding $format and $callback to URLs, for example:<br>http://<host>/SampleService.svc/People?$format=json&amp;$callback=cb<br>Of course, you can still use all the other Data Services URL options in addition to these.  </host></contactsdata></p>
+<p> 使用起来很简单，他是写好了一个Behavior的Attribute，我们只需要在有关的类型上面加上即可</p>
+<p> <a href="http://www.xizhang.com/blogimages/ADO.NET-Data-ServiceJson_111AC/image_3.png" target="_blank"><img src="http://www.xizhang.com/blogimages/ADO.NET-Data-ServiceJson_111AC/image_thumb_3.png" alt="image" title="image"></a></p>
+<p> 然后，在请求地址中添加$format=json这样的字样即可</p>
+<p> <a href="http://localhost:1142/OrderService.svc/Customers(&apos;ALFKI&apos;" target="_blank">http://localhost:1142/OrderService.svc/Customers(&apos;ALFKI&apos;)/Orders?$format=json</a>/Orders?$format=json &quot;<a href="http://localhost:1142/OrderService.svc/Customers(&apos;ALFKI&apos;)/Orders?$format=json" target="_blank">http://localhost:1142/OrderService.svc/Customers(&apos;ALFKI&apos;)/Orders?$format=json</a>&quot;)</p>
+<p> 返回的json数据，大致如下</p>
+<p> <a href="http://www.xizhang.com/blogimages/ADO.NET-Data-ServiceJson_111AC/image_4.png" target="_blank"><img src="http://www.xizhang.com/blogimages/ADO.NET-Data-ServiceJson_111AC/image_thumb_4.png" alt="image" title="image"></a></p>
 
                                 
                                 </section>
@@ -998,8 +1016,12 @@
 
             
                 
+                <a href="2010-11-1867863.html" class="navigation navigation-prev " aria-label="Previous page: 谈谈IE 9的创新和我的一些建议">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="2010-11-1871436.html" class="navigation navigation-next navigation-unique" aria-label="Next page: html5及其相关学习资源介绍">
+                
+                <a href="2010-10-1858848.html" class="navigation navigation-next " aria-label="Next page: MVC 2中HandleErrorFilter的问题及其解决方法">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1010,7 +1032,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"简介","level":"1.1","depth":1,"next":{"title":"html5及其相关学习资源介绍","level":"2.1","depth":1,"path":"2010-11-1871436.md","ref":"2010-11-1871436.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"README.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"ADO.NET Data Service如何直接支持用Json格式返回数据","level":"3.1","depth":1,"next":{"title":"MVC 2中HandleErrorFilter的问题及其解决方法","level":"3.2","depth":1,"path":"2010-10-1858848.md","ref":"2010-10-1858848.md","articles":[]},"previous":{"title":"谈谈IE 9的创新和我的一些建议","level":"2.6","depth":1,"path":"2010-11-1867863.md","ref":"2010-11-1867863.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./docs","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"$schema":"./schema.json","theme":"default","author":"陈希章","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"我的博客","language":"zh","gitbook":"*","description":"过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等"},"file":{"path":"2010-10-1862898.md","mtime":"2021-11-17T09:20:27.045Z","type":"markdown"},"gitbook":{"version":"3.6.23","time":"2021-11-17T09:20:33.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
