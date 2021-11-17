@@ -1,11 +1,12 @@
+from markdownify import markdownify as md
+from bs4 import BeautifulSoup
 import sys
 import os
 import shutil
 from itertools import groupby
 
 import requests
-from bs4 import BeautifulSoup
-from markdownify import markdownify as md
+requests.adapters.DEFAULT_RETRIES = 1
 
 # 从本地数据文件中读取数据
 
@@ -35,6 +36,8 @@ def htmlToMarkdown(html, id):
             r = requests.get(img['src'], stream=True)
             if(r.status_code == 200):
                 path = '/images/'+id+"-" + img['src'].split('/')[-1]
+                if(os.path.exists("../docs"+path)):
+                    continue
                 with open("../docs"+path, 'wb') as f:
                     shutil.copyfileobj(r.raw, f)
                 img['src'] = "."+path
@@ -62,7 +65,7 @@ if __name__ == '__main__':
         open(file_name, mode="r", encoding="utf8"), 'html.parser')
 
     items = groupby(sorted([getPost(item) for item in soup.find_all(
-        'item')][:20], key=lambda x: x['month'], reverse=True), lambda x: x['month'])
+        'item')], key=lambda x: x['month'], reverse=True), lambda x: x['month'])
 
     with open("../docs/SUMMARY.md", mode="a", encoding="utf8") as f:
         for g in items:
@@ -70,5 +73,8 @@ if __name__ == '__main__':
             for post in g[1]:
                 file_path = "{}-{}.md".format(post["month"], post["id"])
                 f.write("* [{}]({})\n".format(post["title"], file_path))
+                if(os.path.exists(path='../docs/{}'.format(file_path))):
+                    continue
+
                 open(file='../docs/{}'.format(file_path), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
                     post["title"], post["pubdate"], post["link"], htmlToMarkdown(post["body"], post["id"])))
