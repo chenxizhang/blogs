@@ -1,11 +1,12 @@
-from markdownify import markdownify as md
-from bs4 import BeautifulSoup
-import sys
 import os
 import shutil
+import sys
 from itertools import groupby
 
 import requests
+from bs4 import BeautifulSoup
+from markdownify import markdownify as md
+
 requests.adapters.DEFAULT_RETRIES = 1
 
 # 从本地数据文件中读取数据
@@ -73,8 +74,6 @@ if __name__ == '__main__':
             for post in g[1]:
                 file_path = "{}-{}.md".format(post["month"], post["id"])
                 f.write("* [{}]({})\n".format(post["title"], file_path))
-                if(os.path.exists(path='../docs/{}'.format(file_path))):
-                    continue
-
-                open(file='../docs/{}'.format(file_path), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
-                    post["title"], post["pubdate"], post["link"], htmlToMarkdown(post["body"], post["id"])))
+                if not os.path.exists(path='../docs/{}'.format(file_path)):
+                    open(file='../docs/{}'.format(file_path), mode='w', encoding='utf-8').write("# {} \n> 原文发表于 {}, 地址: {} \n\n\n{}".format(
+                        post["title"], post["pubdate"], post["link"], htmlToMarkdown(post["body"], post["id"])))
