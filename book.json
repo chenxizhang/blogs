@@ -4,5 +4,9 @@
     "description": "过去十五年所写的技术博客，涉及到的技术领域包括开发、数据库等",
     "author": "陈希章",
     "language": "zh",
-    "root": "./docs"
+    "root": "./docs",
+    "plugins": [
+        "-lunr",
+        "-search"
+    ]
 }
